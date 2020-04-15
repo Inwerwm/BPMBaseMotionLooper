@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MikuMikuMethods.Vmd;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using VmdIO;
 
 namespace BPMBaseMotionLooper
 {
@@ -35,7 +35,7 @@ namespace BPMBaseMotionLooper
             }
             filePath = path;
             textBoxOpenURL.Text = filePath;
-            textBoxDisplay.Text = "入力キーフレーム数：" + (vmd.MotionFrames.Count + vmd.MorphFrames.Count).ToString() + Environment.NewLine;
+            textBoxDisplay.Text += "入力キーフレーム数：" + (vmd.MotionFrames.Count + vmd.MorphFrames.Count).ToString() + Environment.NewLine;
         }
 
         private decimal CalculateFPB()
@@ -138,6 +138,11 @@ namespace BPMBaseMotionLooper
                 return;
             }
 
+            if (checkBoxReload.Checked)
+            {
+                OpenFile(filePath);
+            }
+
             var vmdMotionBuffer = vmd.MotionFrames;
             try
             {
@@ -148,7 +153,6 @@ namespace BPMBaseMotionLooper
                 MessageBox.Show("BPMが0です。");
                 return;
             }
-
 
             var vmdMorphBuffer = vmd.MorphFrames;
             try
@@ -161,14 +165,9 @@ namespace BPMBaseMotionLooper
                 return;
             }
 
-            if (checkBoxReload.Checked)
-            {
-                OpenFile(filePath);
-            }
 
             string writePath;
             writePath = Path.GetDirectoryName(filePath) + @"\" + Path.GetFileNameWithoutExtension(filePath) + "_loop.vmd";
-            textBoxDisplay.AppendText("出力データパス：" + writePath + Environment.NewLine);
             try
             {
                 var writer = new BinaryWriter(File.OpenWrite(writePath));
@@ -182,6 +181,7 @@ namespace BPMBaseMotionLooper
             }
 
             textBoxDisplay.AppendText("出力キーフレーム数：" + (vmd.MotionFrames.Count + vmd.MorphFrames.Count).ToString() + Environment.NewLine);
+            textBoxDisplay.AppendText("出力データパス：" + writePath + Environment.NewLine + Environment.NewLine);
             vmd.MotionFrames = vmdMotionBuffer;
             vmd.MorphFrames = vmdMorphBuffer;
         }
