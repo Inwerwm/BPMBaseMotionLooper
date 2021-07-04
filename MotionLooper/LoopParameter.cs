@@ -12,12 +12,9 @@ namespace MotionLooper
         public decimal BaseFrameRate { get; init; }
         public decimal Interval { get; init; }
 
-        public LoopParameter(decimal bpm, decimal baseFrameRate)
+        public LoopParameter(decimal baseFrameRate)
         {
-            BPM = bpm;
             BaseFrameRate = baseFrameRate;
-
-            Interval = BaseFrameRate / (BPM / 60);
         }
     }
 }
