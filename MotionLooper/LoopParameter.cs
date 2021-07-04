@@ -8,8 +8,8 @@ namespace MotionLooper
 {
     public record LoopParameter
     {
-        public int BPM { get; init; }
-        public int BaseFrameRate { get; init; }
-        public double Interval => BaseFrameRate / BPM / 60;
+        public decimal BPM { get; init; }
+        public decimal BaseFrameRate { get; init; }
+        public decimal Interval => BaseFrameRate / BPM / 60;
     }
 }

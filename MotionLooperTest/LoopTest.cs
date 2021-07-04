@@ -10,7 +10,7 @@ namespace MotionLooperTest
         public void TestCalcBPM()
         {
             LoopParameter loop = new() { BPM = 120, BaseFrameRate = 30 };
-            Assert.AreEqual(15.0, loop.Interval);
+            Assert.AreEqual(15d, loop.Interval);
         }
     }
 }
