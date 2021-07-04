@@ -10,9 +10,13 @@ namespace MotionLooper
 {
     public class FrameDuplicator
     {
-        public IEnumerable<IVocaloidFrame> Duplicate(IEnumerable<IVocaloidFrame> frames, uint offset)
-        {
-            return null;
-        }
+        public IEnumerable<IVocaloidFrame> Duplicate(IEnumerable<IVocaloidFrame> frames, uint offset) => 
+            frames.Select(frame =>
+            {
+                var cloneFrame = frame.Clone() as IVocaloidFrame;
+                if (cloneFrame != null)
+                    cloneFrame.Frame += offset;
+                return cloneFrame;
+            }).Where(frame => frame != null).Cast<IVocaloidFrame>();
     }
 }
