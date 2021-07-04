@@ -20,7 +20,7 @@ namespace MotionLooperTest
                 new VocaloidMotionFrame("test", 0)
             };
             var loopParam = new LoopParameter(30) { Interval = 10m };
-            Duplicator d = new();
+            FrameDuplicator d = new();
 
             IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, loopParam.Interval);
 
