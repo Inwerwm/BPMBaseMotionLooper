@@ -34,7 +34,7 @@ namespace MotionLooper
             };
 
             // nullならここまで到達しない
-            var interval = loop.Interval.Value;
+            var interval = loop.Interval.Value * beat.Frequency;
             var count = beat.ElementCount;
 
             void CreateAndAddDuplicate<T>(List<T> source, List<T> result) where T: IVocaloidFrame
