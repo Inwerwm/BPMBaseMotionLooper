@@ -22,7 +22,7 @@ namespace MotionLooperTest
             var loopParam = new LoopParameter(30) { Interval = 10m };
             FrameDuplicator d = new();
 
-            IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, loopParam.Interval);
+            IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, (uint)loopParam.Interval);
 
             Assert.AreEqual((uint)10, duplicatedFrames.First().Frame);
         }
