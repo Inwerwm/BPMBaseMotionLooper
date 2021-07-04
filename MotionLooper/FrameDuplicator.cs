@@ -18,5 +18,8 @@ namespace MotionLooper
                     cloneFrame.Frame += offset;
                 return cloneFrame;
             }).Where(frame => frame != null).Cast<IVocaloidFrame>();
+
+        public IEnumerable<IVocaloidFrame> Duplicate(IEnumerable<IVocaloidFrame> frames, decimal interval, int count) =>
+            Enumerable.Range(0, count).SelectMany(i => Duplicate(frames, (uint)Math.Round(interval * i)));
     }
 }
