@@ -29,6 +29,8 @@ namespace MotionLooper
             set
             {
                 interval = value;
+                var bps = 30 / value;
+                bpm = bps * 60;
             }
         }
 
