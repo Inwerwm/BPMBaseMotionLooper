@@ -18,7 +18,7 @@ namespace MotionLooper
             get => bpm;
             set
             {
-                decimal? val = ZeroToNull(value);
+                decimal? val = FilterPositiveOnly(value);
 
                 bpm = val;
                 var beetPerSecond = val / 60;
@@ -31,7 +31,7 @@ namespace MotionLooper
             get => interval;
             set
             {
-                decimal? val = ZeroToNull(value);
+                decimal? val = FilterPositiveOnly(value);
 
                 interval = val;
                 var bps = 30 / val;
@@ -44,7 +44,7 @@ namespace MotionLooper
             BaseFrameRate = baseFrameRate;
         }
 
-        private static decimal? ZeroToNull(decimal? value) =>
+        private static decimal? FilterPositiveOnly(decimal? value) =>
             value.HasValue && value != 0m ? value : null;
     }
 }
