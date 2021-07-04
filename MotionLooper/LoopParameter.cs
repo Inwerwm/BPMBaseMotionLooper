@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace MotionLooper
 {
-    public record LoopParameter
+    public class LoopParameter
     {
-        public decimal BPM { get; init; }
         public decimal BaseFrameRate { get; init; }
-        public decimal Interval { get; init; }
+        
+        public decimal BPM { get; set; }
+        public decimal Interval { get; set; }
 
         public LoopParameter(decimal baseFrameRate)
         {
