@@ -10,6 +10,6 @@ namespace MotionLooper
     {
         public int BPM { get; init; }
         public int BaseFrameRate { get; init; }
-        public double Interval { get; init; }
+        public double Interval => BaseFrameRate / BPM / 60;
     }
 }
