@@ -45,6 +45,6 @@ namespace MotionLooper
         }
 
         private static decimal? FilterPositiveOnly(decimal? value) =>
-            value.HasValue && value != 0m ? value : null;
+            value.HasValue && value > 0m ? value : null;
     }
 }
