@@ -8,12 +8,12 @@ namespace MotionLooper
 {
     public class LoopParameter
     {
-        private decimal bpm;
-        private decimal interval;
+        private decimal? bpm;
+        private decimal? interval;
 
         public decimal BaseFrameRate { get; init; }
 
-        public decimal BPM
+        public decimal? BPM
         {
             get => bpm;
             set
@@ -23,7 +23,7 @@ namespace MotionLooper
                 interval = 30 / beetPerSecond;
             }
         }
-        public decimal Interval
+        public decimal? Interval
         {
             get => interval;
             set
