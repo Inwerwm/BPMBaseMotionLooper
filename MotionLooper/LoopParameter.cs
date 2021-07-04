@@ -31,8 +31,10 @@ namespace MotionLooper
             get => interval;
             set
             {
-                interval = value;
-                var bps = 30 / value;
+                decimal? val = ZeroToNull(value);
+
+                interval = val;
+                var bps = 30 / val;
                 bpm = bps * 60;
             }
         }
