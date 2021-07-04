@@ -24,6 +24,7 @@ namespace MotionLooperTest
 
             IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, (uint)loopParam.Interval);
 
+            Assert.AreEqual((uint)0, frames.First().Frame);
             Assert.AreEqual((uint)10, duplicatedFrames.First().Frame);
         }
     }
