@@ -26,6 +26,7 @@ namespace MotionLooperTest
             LoopParameter loop = new(30m) { BPM = 0m };
             Assert.IsNull(loop.Interval);
         }
+
         [TestMethod]
         public void TestIntervalSetToZero()
         {
@@ -33,5 +34,20 @@ namespace MotionLooperTest
             Assert.IsNull(loop.BPM);
         }
 
+        [TestMethod]
+        public void TestBPMSetToNegative()
+        {
+            LoopParameter loop = new(30m) { BPM = -120m };
+            Assert.IsNull(loop.BPM);
+            Assert.IsNull(loop.Interval);
+        }
+
+        [TestMethod]
+        public void TestIntervalSetToNegative()
+        {
+            LoopParameter loop = new(30m) { Interval = -15m };
+            Assert.IsNull(loop.BPM);
+            Assert.IsNull(loop.Interval);
+        }
     }
 }
