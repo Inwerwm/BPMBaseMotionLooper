@@ -4,7 +4,7 @@ using MotionLooper;
 namespace MotionLooperTest
 {
     [TestClass]
-    public class LoopTest
+    public class LoopParameterTest
     {
         [TestMethod]
         public void TestCalcIntervalFromBPM()
