@@ -25,7 +25,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="TextBoxFilePath" IsReadOnly="True" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Text="TextBlock" TextWrapping="Wrap" Margin="20,0,0,10" BorderThickness="0" VerticalAlignment="Bottom" FontSize="20"/>
+        <TextBox x:Name="TextBoxFilePath" IsReadOnly="True" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" TextWrapping="Wrap" Margin="20,0,0,10" BorderThickness="0" VerticalAlignment="Bottom" FontSize="20"/>
         <Line Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10" />
         <Button x:Name="ButtonOpenFile" Grid.Column="4" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" />
 
