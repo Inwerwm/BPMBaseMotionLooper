@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MotionLooper;
 
 namespace MotionLooperTest
 {
@@ -6,8 +7,10 @@ namespace MotionLooperTest
     public class LoopTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestCalcBPM()
         {
+            LoopParameter loop = new() { BPM = 120, BaseFrameRate = 30 };
+            Assert.AreEqual(15, loop.Interval);
         }
     }
 }
