@@ -25,10 +25,10 @@ namespace MotionLooperTest
 
             VocaloidMotionData loopMotion = duplicator.CreateLoopMotion(vmd, loop, beat);
 
-            Assert.AreEqual(0, loopMotion.MotionFrames.ElementAt(0).Frame);
-            Assert.AreEqual(20, loopMotion.MotionFrames.ElementAt(1).Frame);
-            Assert.AreEqual(1, loopMotion.MorphFrames.ElementAt(0).Frame);
-            Assert.AreEqual(21, loopMotion.MorphFrames.ElementAt(1).Frame);
+            Assert.AreEqual((uint)0, loopMotion.MotionFrames.ElementAt(0).Frame);
+            Assert.AreEqual((uint)20, loopMotion.MotionFrames.ElementAt(1).Frame);
+            Assert.AreEqual((uint)1, loopMotion.MorphFrames.ElementAt(0).Frame);
+            Assert.AreEqual((uint)21, loopMotion.MorphFrames.ElementAt(1).Frame);
         }
     }
 }
