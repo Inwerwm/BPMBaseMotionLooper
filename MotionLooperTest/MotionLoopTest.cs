@@ -1,11 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MikuMikuMethods.VMD;
 using MotionLooper;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MotionLooperTest
 {
@@ -18,7 +14,7 @@ namespace MotionLooperTest
             VocaloidMotionData vmd = new() { ModelName = "Test" };
             vmd.MotionFrames.Add(new("test", 0));
             vmd.MorphFrames.Add(new("mp", 1));
-            
+
             LoopParameter loop = new(30) { Interval = 10m };
             BeatParameter beat = new() { Beat = 4, BeatCount = 4, Frequency = 2 };
             FrameDuplicator duplicator = new();

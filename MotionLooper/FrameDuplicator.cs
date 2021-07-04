@@ -1,16 +1,13 @@
 ﻿using MikuMikuMethods.VMD;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MotionLooper
 {
     public class FrameDuplicator
     {
-        public IEnumerable<IVocaloidFrame> Duplicate(IEnumerable<IVocaloidFrame> frames, uint offset) => 
+        public IEnumerable<IVocaloidFrame> Duplicate(IEnumerable<IVocaloidFrame> frames, uint offset) =>
             frames.Select(frame =>
             {
                 var cloneFrame = frame.Clone() as IVocaloidFrame;
@@ -37,7 +34,7 @@ namespace MotionLooper
             var interval = loop.Interval.Value * beat.Frequency;
             var count = beat.ElementCount;
 
-            void CreateAndAddDuplicate<T>(List<T> source, List<T> result) where T: IVocaloidFrame
+            void CreateAndAddDuplicate<T>(List<T> source, List<T> result) where T : IVocaloidFrame
             {
                 if (source.Any())
                     result.AddRange(Duplicate(source.Select(f => (IVocaloidFrame)f), interval, count).Select(f => (T)f));
