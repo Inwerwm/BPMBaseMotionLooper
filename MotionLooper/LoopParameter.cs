@@ -19,7 +19,8 @@ namespace MotionLooper
             set
             {
                 bpm = value;
-                Interval = 30 / (value / 60);
+                var beetPerSecond = value / 60;
+                Interval = 30 / beetPerSecond;
             }
         }
         public decimal Interval
