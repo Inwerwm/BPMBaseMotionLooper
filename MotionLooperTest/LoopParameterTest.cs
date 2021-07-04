@@ -24,6 +24,7 @@ namespace MotionLooperTest
         public void TestBPMSetToZero()
         {
             LoopParameter loop = new(30m) { BPM = 0m };
+            Assert.IsNull(loop.BPM);
             Assert.IsNull(loop.Interval);
         }
 
@@ -32,6 +33,7 @@ namespace MotionLooperTest
         {
             LoopParameter loop = new(30m) { Interval = 0m };
             Assert.IsNull(loop.BPM);
+            Assert.IsNull(loop.Interval);
         }
 
         [TestMethod]
