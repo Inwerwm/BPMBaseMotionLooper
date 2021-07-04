@@ -6,7 +6,8 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:MotionLooper"
         mc:Ignorable="d"
-        Title="Motion Looper" Height="450" Width="800">
+        Title="Motion Looper" Height="450" Width="800"
+        GlowBrush="Black" BorderThickness="0">
     <Grid>
         
     </Grid>
