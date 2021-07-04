@@ -18,8 +18,10 @@ namespace MotionLooper
             get => bpm;
             set
             {
-                bpm = value;
-                var beetPerSecond = value / 60;
+                decimal? val = value.HasValue && value != 0m ? value : null;
+
+                bpm = val;
+                var beetPerSecond = val / 60;
                 interval = 30 / beetPerSecond;
             }
         }
