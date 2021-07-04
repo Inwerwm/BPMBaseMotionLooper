@@ -13,6 +13,7 @@ namespace MotionLooperTest
             Assert.AreEqual(15m, loop.Interval);
         }
 
+        [TestMethod]
         public void TestCalcBPMFromInterval()
         {
             LoopParameter loop = new(30m) { Interval = 15m };
