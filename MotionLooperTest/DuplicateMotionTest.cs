@@ -17,10 +17,10 @@ namespace MotionLooperTest
             {
                 new VocaloidMotionFrame("test", 0)
             };
-            var loopParam = new LoopParameter(30) { Interval = 10m };
+            var calculator = new IntervalCalculator(30) { Interval = 10m };
             FrameDuplicator d = new();
 
-            IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, (uint)loopParam.Interval);
+            IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, (uint)calculator.Interval);
 
             Assert.AreEqual((uint)0, frames.First().Frame);
             Assert.AreEqual((uint)10, duplicatedFrames.First().Frame);
@@ -33,10 +33,10 @@ namespace MotionLooperTest
             {
                 new VocaloidMotionFrame("test", 0)
             };
-            var loopParam = new LoopParameter(30) { Interval = 3.3m };
+            var calculator = new IntervalCalculator(30) { Interval = 3.3m };
             FrameDuplicator d = new();
 
-            IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, loopParam.Interval ?? 3.3m, 6);
+            IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, calculator.Interval ?? 3.3m, 6);
             uint r(decimal value) => (uint)Math.Round(value);
 
             Assert.AreEqual((uint)0, frames.First().Frame);
@@ -55,14 +55,14 @@ namespace MotionLooperTest
             vmd.MotionFrames.Add(new("test", 0));
             vmd.MorphFrames.Add(new("mp", 1));
 
-            LoopParameter loop = new(30) { Interval = 10m };
-            BeatParameter beat = new() { Beat = 4, LoopCount = 4, Frequency = 2 };
+            IntervalCalculator calculator = new(30) { Interval = 10m };
+            DuplicationCounter counter = new() { Beat = 4, LoopCount = 4, Frequency = 2 };
             FrameDuplicator duplicator = new();
 
-            VocaloidMotionData loopMotion = duplicator.CreateLoopMotion(vmd, loop, beat);
+            VocaloidMotionData loopMotion = duplicator.CreateLoopMotion(vmd, calculator, counter);
 
             Assert.AreEqual(2, vmd.Frames.Count());
-            Assert.AreEqual(beat.ElementCount * 2, loopMotion.Frames.Count());
+            Assert.AreEqual(counter.ElementCount * 2, loopMotion.Frames.Count());
 
             Assert.AreEqual((uint)0, loopMotion.MotionFrames.ElementAt(0).Frame);
             Assert.AreEqual((uint)20, loopMotion.MotionFrames.ElementAt(1).Frame);

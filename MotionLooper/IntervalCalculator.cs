@@ -1,6 +1,6 @@
 ﻿namespace MotionLooper
 {
-    public class LoopParameter
+    public class IntervalCalculator
     {
         private decimal? bpm;
         private decimal? interval;
@@ -37,7 +37,7 @@
             }
         }
 
-        public LoopParameter(decimal baseFrameRate)
+        public IntervalCalculator(decimal baseFrameRate)
         {
             BaseFrameRate = baseFrameRate;
         }

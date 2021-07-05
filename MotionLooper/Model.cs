@@ -10,14 +10,14 @@ namespace MotionLooper
 {
     public class Model
     {
-        public BeatParameter BeatParams { get; }
-        public LoopParameter LoopParams { get; }
+        public DuplicationCounter DuplicationCounter { get; }
+        public IntervalCalculator IntervalCalculator { get; }
         public FrameDuplicator FrameDuplicator { get; }
 
         public Model()
         {
-            BeatParams = new();
-            LoopParams = new(30);
+            DuplicationCounter = new();
+            IntervalCalculator = new(30);
             FrameDuplicator = new();
         }
 
@@ -27,7 +27,7 @@ namespace MotionLooper
                                                                     new VocaloidMotionData(filePath);
 
         private VocaloidMotionData CreateLoopMotion(VocaloidMotionData vmd) =>
-            FrameDuplicator.CreateLoopMotion(vmd, LoopParams, BeatParams);
+            FrameDuplicator.CreateLoopMotion(vmd, IntervalCalculator, DuplicationCounter);
 
         public void GenerateLoopMotion(string filePath)
         {

@@ -2,7 +2,7 @@
 
 namespace MotionLooper
 {
-    public class BeatParameter
+    public class DuplicationCounter
     {
         /// <summary>
         /// 周期

@@ -19,7 +19,7 @@ namespace MotionLooper
         public IEnumerable<IVocaloidFrame> Duplicate(IEnumerable<IVocaloidFrame> frames, decimal interval, int count) =>
             Enumerable.Range(0, count).SelectMany(i => Duplicate(frames, (uint)Math.Round(interval * i)));
 
-        public VocaloidMotionData CreateLoopMotion(VocaloidMotionData vmd, LoopParameter loop, BeatParameter beat)
+        public VocaloidMotionData CreateLoopMotion(VocaloidMotionData vmd, IntervalCalculator loop, DuplicationCounter counter)
         {
             if (loop.Interval is null)
                 throw new ArgumentNullException("設置間隔が未設定です。");
@@ -31,8 +31,8 @@ namespace MotionLooper
             };
 
             // nullならここまで到達しない
-            var interval = loop.Interval.Value * beat.Frequency;
-            var count = beat.ElementCount;
+            var interval = loop.Interval.Value * counter.Frequency;
+            var count = counter.ElementCount;
 
             void CreateAndAddDuplicate<T>(List<T> source, List<T> result) where T : IVocaloidFrame
             {

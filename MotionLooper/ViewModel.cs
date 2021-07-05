@@ -51,35 +51,35 @@ namespace MotionLooper
             {
                 if (ignoreChange) return;
 
-                Model.LoopParams.Interval = interval;
+                Model.IntervalCalculator.Interval = interval;
                 
                 ignoreChange = true;
-                BPM.Value = Model.LoopParams.BPM;
+                BPM.Value = Model.IntervalCalculator.BPM;
                 ignoreChange = false;
             });
             BPM.Subscribe(bpm =>
             {
                 if (ignoreChange) return;
 
-                Model.LoopParams.BPM = bpm;
+                Model.IntervalCalculator.BPM = bpm;
 
                 ignoreChange = true;
-                Interval.Value = Model.LoopParams.Interval;
+                Interval.Value = Model.IntervalCalculator.Interval;
                 ignoreChange = false;
             });
 
             Action<bool> UpdateLoopParam = isInterval =>
             {
-                if (isInterval) BPM.Value = Model.LoopParams.BPM;
-                else Interval.Value = Model.LoopParams.Interval;
+                if (isInterval) BPM.Value = Model.IntervalCalculator.BPM;
+                else Interval.Value = Model.IntervalCalculator.Interval;
             };
             
-            Frequency.Subscribe(freq => Model.BeatParams.Frequency = freq);
-            Beat.Subscribe(beat => Model.BeatParams.Beat = beat);
-            LoopNum.Subscribe(lnum => Model.BeatParams.LoopCount = lnum);
-            EnableDecrement.Subscribe(dec => Model.BeatParams.Decrement = dec);
+            Frequency.Subscribe(freq => Model.DuplicationCounter.Frequency = freq);
+            Beat.Subscribe(beat => Model.DuplicationCounter.Beat = beat);
+            LoopNum.Subscribe(lnum => Model.DuplicationCounter.LoopCount = lnum);
+            EnableDecrement.Subscribe(dec => Model.DuplicationCounter.Decrement = dec);
 
-            Action<int> UpdateElemNum = _ => ElementNum.Value = Model.BeatParams.ElementCount;
+            Action<int> UpdateElemNum = _ => ElementNum.Value = Model.DuplicationCounter.ElementCount;
             Frequency.Subscribe(UpdateElemNum);
             Beat.Subscribe(UpdateElemNum);
             LoopNum.Subscribe(UpdateElemNum);
