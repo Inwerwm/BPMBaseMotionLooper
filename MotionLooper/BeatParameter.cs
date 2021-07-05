@@ -16,9 +16,10 @@ namespace MotionLooper
         /// ループ回数
         /// </summary>
         public int LoopCount { get; set; }
+        public bool Decrement { get; set; }
         /// <summary>
         /// 複製回数
         /// </summary>
-        public int ElementCount => (int)Math.Ceiling(Beat * LoopCount / (decimal)Frequency);
+        public int ElementCount => (int)Math.Ceiling(Beat * LoopCount / (decimal)Frequency) - (Decrement ? 1 : 0);
     }
 }

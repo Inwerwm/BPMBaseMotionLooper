@@ -25,5 +25,18 @@ namespace MotionLooperTest
             };
             Assert.AreEqual(4, beat.ElementCount);
         }
+
+        [TestMethod]
+        public void TestDecrement()
+        {
+            BeatParameter beat = new()
+            {
+                Frequency = 2,
+                Beat = 4,
+                LoopCount = 9,
+                Decrement = true
+            };
+            Assert.AreEqual(17, beat.ElementCount);
+        }
     }
 }
