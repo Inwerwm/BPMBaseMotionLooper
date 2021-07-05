@@ -23,6 +23,7 @@ namespace MotionLooper
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new ViewModel();
         }
     }
 }
