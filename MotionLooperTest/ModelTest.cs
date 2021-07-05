@@ -10,6 +10,10 @@ namespace MotionLooperTest
     [TestClass]
     class ModelTest
     {
+        [TestMethod]
+        public void Test()
+        {
 
+        }
     }
 }

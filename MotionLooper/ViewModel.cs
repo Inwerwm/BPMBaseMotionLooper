@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MotionLooper
 {
-    internal class ViewModel : INotifyPropertyChanged, IDisposable
+    public class ViewModel : INotifyPropertyChanged, IDisposable
     {
         private bool disposedValue;
 
@@ -26,6 +26,8 @@ namespace MotionLooper
         public ReactiveProperty<bool> EnableDecrement { get; }
         public ReactiveProperty<int> ElementNum { get; }
 
+        private Model Model { get; }
+
         public ViewModel()
         {
             FilePath = new ReactiveProperty<string>().AddTo(Disposable);
@@ -36,6 +38,24 @@ namespace MotionLooper
             LoopNum = new ReactiveProperty<int>().AddTo(Disposable);
             EnableDecrement = new ReactiveProperty<bool>().AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
+
+            Model = new();
+            SetSubscribes();
+        }
+
+        private void SetSubscribes()
+        {
+            Interval.Subscribe(interval => Model.LoopParams.Interval = interval);
+            BPM.Subscribe(bpm => Model.LoopParams.BPM = bpm);
+            
+            Frequency.Subscribe(freq => Model.BeatParams.Frequency = freq);
+            Beat.Subscribe(beat => Model.BeatParams.Beat = beat);
+            LoopNum.Subscribe(lnum => Model.BeatParams.LoopCount = lnum);
+
+            Action<int> UpdateElemNum = _ => ElementNum.Value = Model.BeatParams.ElementCount;
+            Frequency.Subscribe(UpdateElemNum);
+            Beat.Subscribe(UpdateElemNum);
+            LoopNum.Subscribe(UpdateElemNum);
         }
 
         protected virtual void Dispose(bool disposing)
