@@ -1,4 +1,4 @@
-﻿using Reactive.Bindings;
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,8 @@ namespace MotionLooper
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private CompositeDisposable Disposable { get; } = new CompositeDisposable();
+
+        bool ignoreChange = false;
 
         public ReactiveProperty<string> FilePath { get; }
         public ReactiveProperty<decimal?> Interval { get; }
@@ -45,8 +47,32 @@ namespace MotionLooper
 
         private void SetSubscribes()
         {
-            Interval.Subscribe(interval => Model.LoopParams.Interval = interval);
-            BPM.Subscribe(bpm => Model.LoopParams.BPM = bpm);
+            Interval.Subscribe(interval =>
+            {
+                if (ignoreChange) return;
+
+                Model.LoopParams.Interval = interval;
+                
+                ignoreChange = true;
+                BPM.Value = Model.LoopParams.BPM;
+                ignoreChange = false;
+            });
+            BPM.Subscribe(bpm =>
+            {
+                if (ignoreChange) return;
+
+                Model.LoopParams.BPM = bpm;
+
+                ignoreChange = true;
+                Interval.Value = Model.LoopParams.Interval;
+                ignoreChange = false;
+            });
+
+            Action<bool> UpdateLoopParam = isInterval =>
+            {
+                if (isInterval) BPM.Value = Model.LoopParams.BPM;
+                else Interval.Value = Model.LoopParams.Interval;
+            };
             
             Frequency.Subscribe(freq => Model.BeatParams.Frequency = freq);
             Beat.Subscribe(beat => Model.BeatParams.Beat = beat);
