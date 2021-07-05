@@ -55,7 +55,7 @@ namespace MotionLooper
             Log = new ReactiveProperty<string>().AddTo(Disposable);
 
             OpenFile = new ReactiveCommand();
-            ExecuteGeneration = IsDuplicationCountVaild.ToReactiveCommand();
+            ExecuteGeneration = new[] { IsDuplicationCountVaild, IsFileSpecified }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
 
             AppendLog = logAppender;
 
