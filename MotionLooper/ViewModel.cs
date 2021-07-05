@@ -31,10 +31,11 @@ namespace MotionLooper
         public ReactiveProperty<string> Log { get; }
 
         public ReactiveCommand ExecuteGeneration { get; }
+        private Action<string> AppendLog { get; }
 
         private Model Model { get; }
 
-        public ViewModel()
+        public ViewModel(Action<string> logAppender)
         {
             FilePath = new ReactiveProperty<string>().AddTo(Disposable);
             Interval = new ReactiveProperty<decimal?>(15).AddTo(Disposable);
@@ -48,6 +49,8 @@ namespace MotionLooper
             Log = new ReactiveProperty<string>().AddTo(Disposable);
 
             ExecuteGeneration = new ReactiveCommand().AddTo(Disposable);
+
+            AppendLog = logAppender;
 
             Model = new();
             SetSubscribes();

@@ -23,7 +23,10 @@ namespace MotionLooper
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ViewModel();
+            DataContext = new ViewModel(msg => {
+                TextBoxLog.AppendText(msg + Environment.NewLine);
+                TextBoxLog.ScrollToEnd();
+            });
         }
     }
 }
