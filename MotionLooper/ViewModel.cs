@@ -28,6 +28,8 @@ namespace MotionLooper
         public ReactiveProperty<bool> EnableDecrement { get; }
         public ReactiveProperty<int> ElementNum { get; }
 
+        public ReactiveCommand ExecuteGeneration { get; }
+
         private Model Model { get; }
 
         public ViewModel()
@@ -40,6 +42,7 @@ namespace MotionLooper
             LoopNum = new ReactiveProperty<int>(1).AddTo(Disposable);
             EnableDecrement = new ReactiveProperty<bool>().AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
+            ExecuteGeneration = new ReactiveCommand().AddTo(Disposable);
 
             Model = new();
             SetSubscribes();
