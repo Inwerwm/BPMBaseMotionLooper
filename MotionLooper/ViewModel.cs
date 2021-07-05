@@ -77,11 +77,13 @@ namespace MotionLooper
             Frequency.Subscribe(freq => Model.BeatParams.Frequency = freq);
             Beat.Subscribe(beat => Model.BeatParams.Beat = beat);
             LoopNum.Subscribe(lnum => Model.BeatParams.LoopCount = lnum);
+            EnableDecrement.Subscribe(dec => Model.BeatParams.Decrement = dec);
 
             Action<int> UpdateElemNum = _ => ElementNum.Value = Model.BeatParams.ElementCount;
             Frequency.Subscribe(UpdateElemNum);
             Beat.Subscribe(UpdateElemNum);
             LoopNum.Subscribe(UpdateElemNum);
+            EnableDecrement.Subscribe(_ => UpdateElemNum(0));
         }
 
         protected virtual void Dispose(bool disposing)
