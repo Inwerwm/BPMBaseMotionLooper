@@ -29,6 +29,7 @@ namespace MotionLooper
         public ReactiveProperty<bool> EnableDecrement { get; }
         public ReactiveProperty<int> ElementNum { get; }
 
+        public ReactiveProperty<bool> IsFileSpecified { get; }
         public ReactiveProperty<bool> IsDuplicationCountVaild { get; }
         public ReactiveProperty<string> Log { get; }
 
@@ -49,6 +50,7 @@ namespace MotionLooper
             EnableDecrement = new ReactiveProperty<bool>().AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
 
+            IsFileSpecified = new ReactiveProperty<bool>().AddTo(Disposable);
             IsDuplicationCountVaild = new ReactiveProperty<bool>().AddTo(Disposable);
             Log = new ReactiveProperty<string>().AddTo(Disposable);
 
@@ -118,7 +120,26 @@ namespace MotionLooper
 
                 if (ofd.ShowDialog() ?? false)
                 {
-                    FilePath.Value = ofd.FileName;
+                    try
+                    {
+                        var vmd = Model.ReadFile(ofd.FileName);
+                        FilePath.Value = ofd.FileName;
+                        AppendLog($"入力フレーム数 : {vmd.Frames.Count()}");
+                    }
+                    catch (System.IO.FileNotFoundException)
+                    {
+                        AppendLog("ファイルが見つかりませんでした。");
+                        FilePath.Value = null;
+                    }
+                    catch (System.IO.InvalidDataException)
+                    {
+                        AppendLog("非VMDファイルが指定されました。");
+                        FilePath.Value = null;
+                    }
+                    finally
+                    {
+                        IsFileSpecified.Value = !string.IsNullOrEmpty(FilePath.Value);
+                    }
                 }
             });
         }
