@@ -13,12 +13,12 @@ namespace MotionLooper
         /// </summary>
         public int Beat { get; set; }
         /// <summary>
-        /// 設置拍数
+        /// ループ回数
         /// </summary>
-        public int BeatCount { get; set; }
+        public int LoopCount { get; set; }
         /// <summary>
         /// 複製回数
         /// </summary>
-        public int ElementCount => (int)Math.Ceiling(Beat * BeatCount / (decimal)Frequency);
+        public int ElementCount => (int)Math.Ceiling(Beat * LoopCount / (decimal)Frequency);
     }
 }

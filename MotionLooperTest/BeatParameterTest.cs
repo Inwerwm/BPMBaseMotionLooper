@@ -13,7 +13,7 @@ namespace MotionLooperTest
             {
                 Frequency = 2,
                 Beat = 4,
-                BeatCount = 9
+                LoopCount = 9
             };
             Assert.AreEqual(18, beat.ElementCount);
 
@@ -21,7 +21,7 @@ namespace MotionLooperTest
             {
                 Frequency = 6,
                 Beat = 4,
-                BeatCount = 5
+                LoopCount = 5
             };
             Assert.AreEqual(4, beat.ElementCount);
         }

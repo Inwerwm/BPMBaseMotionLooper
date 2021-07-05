@@ -16,7 +16,7 @@ namespace MotionLooperTest
             vmd.MorphFrames.Add(new("mp", 1));
 
             LoopParameter loop = new(30) { Interval = 10m };
-            BeatParameter beat = new() { Beat = 4, BeatCount = 4, Frequency = 2 };
+            BeatParameter beat = new() { Beat = 4, LoopCount = 4, Frequency = 2 };
             FrameDuplicator duplicator = new();
 
             VocaloidMotionData loopMotion = duplicator.CreateLoopMotion(vmd, loop, beat);
