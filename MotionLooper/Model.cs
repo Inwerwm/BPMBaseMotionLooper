@@ -21,7 +21,7 @@ namespace MotionLooper
             FrameDuplicator = new();
         }
 
-        private VocaloidMotionData ReadFile(string filePath) =>
+        public VocaloidMotionData ReadFile(string filePath) =>
             !File.Exists(filePath)                          ? throw new FileNotFoundException() :
             Path.GetExtension(filePath).ToLower() != ".vmd" ? throw new InvalidDataException() :
                                                                     new VocaloidMotionData(filePath);
