@@ -48,7 +48,7 @@
         <TextBox x:Name="TextBoxElementNum" IsReadOnly="True" Grid.Column="4" Grid.Row="2" TextWrapping="Wrap" Margin="20,-14,20,0" BorderThickness="0" TextAlignment="Center" VerticalAlignment="Top" FontSize="36" Text="{Binding ElementNum.Value}"/>
         <Line Grid.Column="4" Grid.Row="2" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="20,0,20,5" />
 
-        <Button x:Name="ButtonExecute" Grid.Column="4" Grid.Row="3" Content="実行" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5,0,5,0" FontSize="15" VerticalAlignment="Center" />
+        <Button x:Name="ButtonExecute" Grid.Column="4" Grid.Row="3" Content="実行" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5,0,5,0" FontSize="15" VerticalAlignment="Center" Command="{Binding ExecuteGeneration}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="4" Margin="10,0,10,0" FontSize="15" TextWrapping="Wrap">
             BPMと配置間隔は<LineBreak/>
