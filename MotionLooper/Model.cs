@@ -31,9 +31,16 @@ namespace MotionLooper
 
         public void GenerateLoopMotion(string filePath)
         {
-            var sourceVMD = ReadFile(filePath);
-            var savePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", Path.GetFileNameWithoutExtension(filePath) + "_loop.vmd");
-            CreateLoopMotion(sourceVMD).Write(savePath);
+            try
+            {
+                var sourceVMD = ReadFile(filePath);
+                var savePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", Path.GetFileNameWithoutExtension(filePath) + "_loop.vmd");
+                CreateLoopMotion(sourceVMD).Write(savePath);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
