@@ -66,6 +66,6 @@
         </TextBlock>
         <Controls:ToggleSwitch x:Name="SwitchDecrement" Grid.Column="4" Grid.Row="4" Header="設置回数を 1 減らす" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center" ContentDirection="RightToLeft" Controls:ControlsHelper.ContentCharacterCasing="Normal" Controls:HeaderedControlHelper.HeaderHorizontalContentAlignment="Left" Controls:HeaderedControlHelper.HeaderVerticalContentAlignment="Stretch" Controls:HeaderedControlHelper.HeaderMargin="0,0,0,0" Controls:HeaderedControlHelper.HeaderFontStretch="Normal" Controls:HeaderedControlHelper.HeaderFontWeight="Normal" Margin="20,5,0,0" IsOn="{Binding EnableDecrement.Value}" />
 
-        <TextBox x:Name="TextBoxLog" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" IsReadOnly="True" FontSize="20" Style="{DynamicResource MahApps.Styles.TextBox}" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <TextBox x:Name="TextBoxLog" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" IsReadOnly="True" FontSize="20" Style="{DynamicResource MahApps.Styles.TextBox}" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Log.Value}"/>
     </Grid>
 </Controls:MetroWindow>
