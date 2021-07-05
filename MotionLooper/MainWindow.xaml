@@ -27,7 +27,7 @@
 
         <TextBox x:Name="TextBoxFilePath" IsReadOnly="True" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" TextWrapping="Wrap" Margin="20,0,0,10" BorderThickness="0" VerticalAlignment="Bottom" FontSize="20" Text="{Binding FilePath.Value}"/>
         <Line Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10" />
-        <Button x:Name="ButtonOpenFile" Grid.Column="4" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" />
+        <Button x:Name="ButtonOpenFile" Grid.Column="4" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" Command="{Binding OpenFile}" />
 
         <TextBlock Text="配置間隔" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,10"/>
         <Controls:NumericUpDown x:Name="NumericInterval" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Margin="10,0,10,10" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding Interval.Value}" />

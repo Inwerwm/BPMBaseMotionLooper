@@ -1,4 +1,5 @@
-﻿using Reactive.Bindings;
+﻿using Microsoft.Win32;
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace MotionLooper
         public ReactiveProperty<bool> IsDuplicationCountVaild { get; }
         public ReactiveProperty<string> Log { get; }
 
+        public ReactiveCommand OpenFile { get; }
         public ReactiveCommand ExecuteGeneration { get; }
         private Action<string> AppendLog { get; }
 
@@ -50,6 +52,7 @@ namespace MotionLooper
             IsDuplicationCountVaild = new ReactiveProperty<bool>().AddTo(Disposable);
             Log = new ReactiveProperty<string>().AddTo(Disposable);
 
+            OpenFile = new ReactiveCommand();
             ExecuteGeneration = IsDuplicationCountVaild.ToReactiveCommand();
 
             AppendLog = logAppender;
@@ -101,6 +104,23 @@ namespace MotionLooper
             Beat.Subscribe(UpdateElemNum);
             LoopNum.Subscribe(UpdateElemNum);
             EnableDecrement.Subscribe(_ => UpdateElemNum(0));
+
+            OpenFile.Subscribe(_ =>
+            {
+                var ofd = new OpenFileDialog()
+                {
+                    Filter = "VMDファイル(*.vmd)|*.vmd",
+                    AddExtension = true,
+                    CheckFileExists = true,
+                    CheckPathExists = true,
+                    Multiselect = false,
+                };
+
+                if (ofd.ShowDialog() ?? false)
+                {
+                    FilePath.Value = ofd.FileName;
+                }
+            });
         }
 
         protected virtual void Dispose(bool disposing)
