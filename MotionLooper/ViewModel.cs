@@ -28,6 +28,7 @@ namespace MotionLooper
         public ReactiveProperty<bool> EnableDecrement { get; }
         public ReactiveProperty<int> ElementNum { get; }
 
+        public ReactiveProperty<bool> IsDuplicationCountVaild { get; }
         public ReactiveProperty<string> Log { get; }
 
         public ReactiveCommand ExecuteGeneration { get; }
@@ -46,9 +47,10 @@ namespace MotionLooper
             EnableDecrement = new ReactiveProperty<bool>().AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
 
+            IsDuplicationCountVaild = new ReactiveProperty<bool>().AddTo(Disposable);
             Log = new ReactiveProperty<string>().AddTo(Disposable);
 
-            ExecuteGeneration = new ReactiveCommand().AddTo(Disposable);
+            ExecuteGeneration = IsDuplicationCountVaild.ToReactiveCommand();
 
             AppendLog = logAppender;
 
@@ -90,7 +92,11 @@ namespace MotionLooper
             LoopNum.Subscribe(lnum => Model.DuplicationCounter.LoopCount = lnum);
             EnableDecrement.Subscribe(dec => Model.DuplicationCounter.Decrement = dec);
 
-            Action<int> UpdateElemNum = _ => ElementNum.Value = Model.DuplicationCounter.ElementCount;
+            Action<int> UpdateElemNum = _ =>
+            {
+                ElementNum.Value = Model.DuplicationCounter.ElementCount;
+                IsDuplicationCountVaild.Value = ElementNum.Value > 0;
+            };
             Frequency.Subscribe(UpdateElemNum);
             Beat.Subscribe(UpdateElemNum);
             LoopNum.Subscribe(UpdateElemNum);
