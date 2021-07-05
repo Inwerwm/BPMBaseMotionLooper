@@ -21,7 +21,7 @@ namespace MotionLooper
         public ReactiveProperty<decimal?> Interval { get; }
         public ReactiveProperty<decimal?> BPM { get; }
         public ReactiveProperty<int> Frequency { get; }
-        public ReactiveProperty<int> Beet { get; }
+        public ReactiveProperty<int> Beat { get; }
         public ReactiveProperty<int> LoopNum { get; }
         public ReactiveProperty<bool> EnableDecrement { get; }
         public ReactiveProperty<int> ElementNum { get; }
@@ -32,7 +32,7 @@ namespace MotionLooper
             Interval = new ReactiveProperty<decimal?>().AddTo(Disposable);
             BPM = new ReactiveProperty<decimal?>().AddTo(Disposable);
             Frequency = new ReactiveProperty<int>().AddTo(Disposable);
-            Beet = new ReactiveProperty<int>().AddTo(Disposable);
+            Beat = new ReactiveProperty<int>().AddTo(Disposable);
             LoopNum = new ReactiveProperty<int>().AddTo(Disposable);
             EnableDecrement = new ReactiveProperty<bool>().AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
