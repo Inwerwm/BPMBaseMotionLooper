@@ -16,7 +16,7 @@ namespace MotionLooper
 
         public Model()
         {
-            BeatParams = new() { Frequency = 1 };
+            BeatParams = new();
             LoopParams = new(30);
             FrameDuplicator = new();
         }
