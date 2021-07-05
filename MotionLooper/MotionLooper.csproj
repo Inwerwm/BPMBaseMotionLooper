@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="2.4.7" />
+    <PackageReference Include="ReactiveProperty" Version="7.11.0" />
   </ItemGroup>
 
   <ItemGroup>
