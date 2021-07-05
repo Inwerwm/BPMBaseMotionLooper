@@ -1,4 +1,4 @@
-using Reactive.Bindings;
+﻿using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
@@ -33,11 +33,11 @@ namespace MotionLooper
         public ViewModel()
         {
             FilePath = new ReactiveProperty<string>().AddTo(Disposable);
-            Interval = new ReactiveProperty<decimal?>().AddTo(Disposable);
-            BPM = new ReactiveProperty<decimal?>().AddTo(Disposable);
-            Frequency = new ReactiveProperty<int>().AddTo(Disposable);
-            Beat = new ReactiveProperty<int>().AddTo(Disposable);
-            LoopNum = new ReactiveProperty<int>().AddTo(Disposable);
+            Interval = new ReactiveProperty<decimal?>(15).AddTo(Disposable);
+            BPM = new ReactiveProperty<decimal?>(0).AddTo(Disposable);
+            Frequency = new ReactiveProperty<int>(1).AddTo(Disposable);
+            Beat = new ReactiveProperty<int>(1).AddTo(Disposable);
+            LoopNum = new ReactiveProperty<int>(1).AddTo(Disposable);
             EnableDecrement = new ReactiveProperty<bool>().AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
 
