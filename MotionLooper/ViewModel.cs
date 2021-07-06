@@ -63,6 +63,8 @@ namespace MotionLooper
 
         private void SetSubscribes()
         {
+            FilePath.Subscribe(path => IsFileSpecified.Value = !string.IsNullOrEmpty(path));
+
             Interval.Subscribe(interval =>
             {
                 if (ignoreChange) return;
@@ -133,10 +135,6 @@ namespace MotionLooper
                     {
                         AppendLog("非VMDファイルが指定されました。");
                         FilePath.Value = null;
-                    }
-                    finally
-                    {
-                        IsFileSpecified.Value = !string.IsNullOrEmpty(FilePath.Value);
                     }
                 }
             });
