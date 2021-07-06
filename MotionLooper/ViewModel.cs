@@ -2,13 +2,10 @@
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MotionLooper
 {
@@ -71,7 +68,7 @@ namespace MotionLooper
                 if (ignoreChange) return;
 
                 Model.IntervalCalculator.Interval = interval;
-                
+
                 ignoreChange = true;
                 BPM.Value = Model.IntervalCalculator.BPM;
                 ignoreChange = false;
@@ -92,7 +89,7 @@ namespace MotionLooper
                 if (isInterval) BPM.Value = Model.IntervalCalculator.BPM;
                 else Interval.Value = Model.IntervalCalculator.Interval;
             };
-            
+
             Frequency.Subscribe(freq => Model.DuplicationCounter.Frequency = freq);
             Beat.Subscribe(beat => Model.DuplicationCounter.Beat = beat);
             LoopNum.Subscribe(lnum => Model.DuplicationCounter.LoopCount = lnum);
