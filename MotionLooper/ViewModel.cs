@@ -4,6 +4,7 @@ using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text;
@@ -126,12 +127,12 @@ namespace MotionLooper
                         FilePath.Value = ofd.FileName;
                         AppendLog($"入力フレーム数 : {vmd.Frames.Count()}");
                     }
-                    catch (System.IO.FileNotFoundException)
+                    catch (FileNotFoundException)
                     {
                         AppendLog("ファイルが見つかりませんでした。");
                         FilePath.Value = null;
                     }
-                    catch (System.IO.InvalidDataException)
+                    catch (InvalidDataException)
                     {
                         AppendLog("非VMDファイルが指定されました。");
                         FilePath.Value = null;
@@ -140,6 +141,36 @@ namespace MotionLooper
                     {
                         IsFileSpecified.Value = !string.IsNullOrEmpty(FilePath.Value);
                     }
+                }
+            });
+
+            ExecuteGeneration.Subscribe(_ =>
+            {
+                try
+                {
+                    var filePath = FilePath.Value ?? "";
+                    var sourceVMD = Model.ReadFile(filePath);
+                    var savePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", Path.GetFileNameWithoutExtension(filePath) + "_loop.vmd");
+                    var loopMotion = Model.CreateLoopMotion(sourceVMD);
+                    loopMotion.Write(savePath);
+                    AppendLog($"出力が完了しました。");
+                    AppendLog($"フレーム数 : {sourceVMD.Frames.Count()} → {loopMotion.Frames.Count()}");
+                    AppendLog($"保存先 : {savePath}");
+                    AppendLog(Environment.NewLine);
+                }
+                catch (FileNotFoundException)
+                {
+                    AppendLog("ファイルが見つかりませんでした。");
+                    FilePath.Value = null;
+                }
+                catch (InvalidDataException)
+                {
+                    AppendLog("非VMDファイルが指定されました。");
+                    FilePath.Value = null;
+                }
+                catch (Exception ex)
+                {
+                    AppendLog($"エラーが発生しました。{ex.Message}");
                 }
             });
         }

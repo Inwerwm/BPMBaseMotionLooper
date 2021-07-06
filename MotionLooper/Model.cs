@@ -26,21 +26,7 @@ namespace MotionLooper
             Path.GetExtension(filePath).ToLower() != ".vmd" ? throw new InvalidDataException() :
                                                                     new VocaloidMotionData(filePath);
 
-        private VocaloidMotionData CreateLoopMotion(VocaloidMotionData vmd) =>
+        public VocaloidMotionData CreateLoopMotion(VocaloidMotionData vmd) =>
             FrameDuplicator.CreateLoopMotion(vmd, IntervalCalculator, DuplicationCounter);
-
-        public void GenerateLoopMotion(string filePath)
-        {
-            try
-            {
-                var sourceVMD = ReadFile(filePath);
-                var savePath = Path.Combine(Path.GetDirectoryName(filePath) ?? "", Path.GetFileNameWithoutExtension(filePath) + "_loop.vmd");
-                CreateLoopMotion(sourceVMD).Write(savePath);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
     }
 }
