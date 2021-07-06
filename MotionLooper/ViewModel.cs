@@ -42,13 +42,13 @@ namespace MotionLooper
 
         public ViewModel(Action<string> logAppender)
         {
-            FilePath = new ReactiveProperty<string>().AddTo(Disposable);
-            Interval = new ReactiveProperty<decimal?>(15).AddTo(Disposable);
-            BPM = new ReactiveProperty<decimal?>(0).AddTo(Disposable);
-            Frequency = new ReactiveProperty<int>(1).AddTo(Disposable);
-            Beat = new ReactiveProperty<int>(1).AddTo(Disposable);
-            LoopNum = new ReactiveProperty<int>(1).AddTo(Disposable);
-            EnableDecrement = new ReactiveProperty<bool>().AddTo(Disposable);
+            FilePath = new ReactiveProperty<string>(Properties.Settings.Default.FilePath).AddTo(Disposable);
+            Interval = new ReactiveProperty<decimal?>(Properties.Settings.Default.Interval).AddTo(Disposable);
+            BPM = new ReactiveProperty<decimal?>(Properties.Settings.Default.BPM).AddTo(Disposable);
+            Frequency = new ReactiveProperty<int>(Properties.Settings.Default.Frequency).AddTo(Disposable);
+            Beat = new ReactiveProperty<int>(Properties.Settings.Default.Beat).AddTo(Disposable);
+            LoopNum = new ReactiveProperty<int>(Properties.Settings.Default.LoopNum).AddTo(Disposable);
+            EnableDecrement = new ReactiveProperty<bool>(Properties.Settings.Default.Decrement).AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
 
             IsFileSpecified = new ReactiveProperty<bool>().AddTo(Disposable);
@@ -173,6 +173,14 @@ namespace MotionLooper
                     AppendLog($"エラーが発生しました。{ex.Message}");
                 }
             });
+
+            FilePath.Subscribe(path => Properties.Settings.Default.FilePath = path);
+            Interval.Subscribe(iv => Properties.Settings.Default.Interval = iv ?? 1);
+            BPM.Subscribe(bpm => Properties.Settings.Default.BPM = bpm ?? 1);
+            Frequency.Subscribe(freq => Properties.Settings.Default.Frequency = freq);
+            Beat.Subscribe(beat => Properties.Settings.Default.Beat = beat);
+            LoopNum.Subscribe(l => Properties.Settings.Default.LoopNum = l);
+            EnableDecrement.Subscribe(d => Properties.Settings.Default.Decrement = d);
         }
 
         protected virtual void Dispose(bool disposing)
