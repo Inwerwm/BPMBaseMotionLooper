@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 
 namespace MotionLooper
 {
@@ -20,6 +21,17 @@ namespace MotionLooper
         private void MetroWindow_Closed(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save();
+        }
+
+        private void MetroWindow_PreviewDragOver(object sender, System.Windows.DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Copy;
+            e.Handled = e.Data.GetDataPresent(DataFormats.FileDrop);
+        }
+
+        private void MetroWindow_Drop(object sender, DragEventArgs e)
+        {
+            ((ViewModel)DataContext).ReadFile(((string[])e.Data.GetData(DataFormats.FileDrop))[0]);
         }
     }
 }
