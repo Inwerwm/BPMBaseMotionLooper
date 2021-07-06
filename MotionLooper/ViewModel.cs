@@ -120,22 +120,8 @@ namespace MotionLooper
 
                 if (ofd.ShowDialog() ?? false)
                 {
-                    try
-                    {
-                        var vmd = Model.ReadFile(ofd.FileName);
-                        FilePath.Value = ofd.FileName;
-                        AppendLog($"入力フレーム数 : {vmd.Frames.Count()}");
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        AppendLog("ファイルが見つかりませんでした。");
-                        FilePath.Value = null;
-                    }
-                    catch (InvalidDataException)
-                    {
-                        AppendLog("非VMDファイルが指定されました。");
-                        FilePath.Value = null;
-                    }
+                    string fileName = ofd.FileName;
+                    ReadFile(fileName);
                 }
             });
 
@@ -176,6 +162,26 @@ namespace MotionLooper
             Beat.Subscribe(beat => Properties.Settings.Default.Beat = beat);
             LoopNum.Subscribe(l => Properties.Settings.Default.LoopNum = l);
             EnableDecrement.Subscribe(d => Properties.Settings.Default.Decrement = d);
+        }
+
+        public void ReadFile(string fileName)
+        {
+            try
+            {
+                var vmd = Model.ReadFile(fileName);
+                FilePath.Value = fileName;
+                AppendLog($"入力フレーム数 : {vmd.Frames.Count()}");
+            }
+            catch (FileNotFoundException)
+            {
+                AppendLog("ファイルが見つかりませんでした。");
+                FilePath.Value = null;
+            }
+            catch (InvalidDataException)
+            {
+                AppendLog("非VMDファイルが指定されました。");
+                FilePath.Value = null;
+            }
         }
 
         protected virtual void Dispose(bool disposing)
