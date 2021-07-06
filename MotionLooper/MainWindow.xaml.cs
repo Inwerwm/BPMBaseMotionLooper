@@ -28,5 +28,10 @@ namespace MotionLooper
                 TextBoxLog.ScrollToEnd();
             });
         }
+
+        private void MetroWindow_Closed(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
     }
 }

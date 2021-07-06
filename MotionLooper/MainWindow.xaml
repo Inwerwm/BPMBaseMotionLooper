@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:MotionLooper"
         mc:Ignorable="d"
         Title="Motion Looper" Height="600" Width="800"
-        GlowBrush="Black" BorderThickness="0" FontSize="20" FontFamily="Consolas, Yu Gothic Medium">
+        GlowBrush="Black" BorderThickness="0" FontSize="20" FontFamily="Consolas, Yu Gothic Medium" Closed="MetroWindow_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
