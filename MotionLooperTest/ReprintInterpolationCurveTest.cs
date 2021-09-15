@@ -1,13 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MikuMikuMethods.VMD;
 using System.Collections.Generic;
+using System.Linq;
+using MotionLooper;
 
 namespace MotionLooperTest
 {
     [TestClass]
     public class ReprintInterpolationCurveTest
     {
-        List<IVmdFrame> SourceFrames { get; } = new();
+        List<IVmdInterpolatable> SourceFrames { get; } = new();
 
         [TestInitialize]
         public void CreateTestData()
@@ -27,7 +29,7 @@ namespace MotionLooperTest
                 SourceFrames.Add(CreateFrame(boneName, late.Frame, late.X, late.Y));
             }
 
-            IVmdFrame CreateFrame(string boneName, uint frame, float xPos, float yPos)
+            IVmdInterpolatable CreateFrame(string boneName, uint frame, float xPos, float yPos)
             {
                 var key = new VmdMotionFrame(boneName, frame);
                 foreach (var curve in key.InterpolationCurves)
@@ -42,7 +44,22 @@ namespace MotionLooperTest
         [TestMethod]
         public void TestReprint()
         {
+            List<IVmdInterpolatable> targetFrames = new();
+            targetFrames.Add(new VmdMotionFrame("センター", 0));
+            targetFrames.Add(new VmdMotionFrame("上半身2", 0));
+            targetFrames.Add(new VmdMotionFrame("センター", 10));
+            targetFrames.Add(new VmdMotionFrame("上半身2", 10));
 
+            targetFrames.ElementAt(0).InterpolationCurves[MikuMikuMethods.InterpolationItem.XPosition].EarlyControlePointFloat = (1.0f, 0.0f);
+
+            var reprinter = new InterpolationCurveReprinter();
+            var reprinted = reprinter.Reprint(SourceFrames, targetFrames);
+
+            Assert.AreEqual(1.0f, targetFrames.ElementAt(0).InterpolationCurves[MikuMikuMethods.InterpolationItem.XPosition].EarlyControlePointFloat.X);
+
+            Assert.AreEqual(4, reprinted.Count());
+            Assert.AreEqual(0.5f, reprinted.ElementAt(0).InterpolationCurves[MikuMikuMethods.InterpolationItem.XPosition].EarlyControlePointFloat.X);
+            Assert.AreEqual(0.0f, reprinted.ElementAt(2).InterpolationCurves[MikuMikuMethods.InterpolationItem.XPosition].EarlyControlePointFloat.X);
         }
     }
 }
