@@ -13,14 +13,14 @@ namespace MotionLooperTest
         [TestMethod]
         public void TestDuplicateFrames()
         {
-            IEnumerable<IVocaloidFrame> frames = new List<IVocaloidFrame>
+            IEnumerable<IVmdFrame> frames = new List<IVmdFrame>
             {
-                new VocaloidMotionFrame("test", 0)
+                new VmdMotionFrame("test", 0)
             };
             var calculator = new IntervalCalculator(30) { Interval = 10m };
             FrameDuplicator d = new();
 
-            IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, (uint)calculator.Interval);
+            IEnumerable<IVmdFrame> duplicatedFrames = d.Duplicate(frames, (uint)calculator.Interval);
 
             Assert.AreEqual((uint)0, frames.First().Frame);
             Assert.AreEqual((uint)10, duplicatedFrames.First().Frame);
@@ -29,14 +29,14 @@ namespace MotionLooperTest
         [TestMethod]
         public void TestMultipleDuplicate()
         {
-            IEnumerable<IVocaloidFrame> frames = new List<IVocaloidFrame>
+            IEnumerable<IVmdFrame> frames = new List<IVmdFrame>
             {
-                new VocaloidMotionFrame("test", 0)
+                new VmdMotionFrame("test", 0)
             };
             var calculator = new IntervalCalculator(30) { Interval = 3.3m };
             FrameDuplicator d = new();
 
-            IEnumerable<IVocaloidFrame> duplicatedFrames = d.Duplicate(frames, calculator.Interval ?? 3.3m, 6);
+            IEnumerable<IVmdFrame> duplicatedFrames = d.Duplicate(frames, calculator.Interval ?? 3.3m, 6);
             uint r(decimal value) => (uint)Math.Round(value);
 
             Assert.AreEqual((uint)0, frames.First().Frame);

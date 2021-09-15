@@ -7,16 +7,16 @@ namespace MotionLooper
 {
     public class FrameDuplicator
     {
-        public IEnumerable<IVocaloidFrame> Duplicate(IEnumerable<IVocaloidFrame> frames, uint offset) =>
+        public IEnumerable<IVmdFrame> Duplicate(IEnumerable<IVmdFrame> frames, uint offset) =>
             frames.Select(frame =>
             {
-                var cloneFrame = frame.Clone() as IVocaloidFrame;
+                var cloneFrame = frame.Clone() as IVmdFrame;
                 if (cloneFrame != null)
                     cloneFrame.Frame += offset;
                 return cloneFrame;
-            }).Where(frame => frame != null).Cast<IVocaloidFrame>();
+            }).Where(frame => frame != null).Cast<IVmdFrame>();
 
-        public IEnumerable<IVocaloidFrame> Duplicate(IEnumerable<IVocaloidFrame> frames, decimal interval, int count) =>
+        public IEnumerable<IVmdFrame> Duplicate(IEnumerable<IVmdFrame> frames, decimal interval, int count) =>
             Enumerable.Range(0, count).SelectMany(i => Duplicate(frames, (uint)Math.Round(interval * i)));
 
         public VocaloidMotionData CreateLoopMotion(VocaloidMotionData vmd, IntervalCalculator loop, DuplicationCounter counter)
@@ -34,10 +34,10 @@ namespace MotionLooper
             var interval = loop.Interval.Value * counter.Frequency;
             var count = counter.ElementCount;
 
-            void CreateAndAddDuplicate<T>(List<T> source, List<T> result) where T : IVocaloidFrame
+            void CreateAndAddDuplicate<T>(List<T> source, List<T> result) where T : IVmdFrame
             {
                 if (source.Any())
-                    result.AddRange(Duplicate(source.Select(f => (IVocaloidFrame)f), interval, count).Select(f => (T)f));
+                    result.AddRange(Duplicate(source.Select(f => (IVmdFrame)f), interval, count).Select(f => (T)f));
             }
 
             CreateAndAddDuplicate(vmd.CameraFrames, result.CameraFrames);
