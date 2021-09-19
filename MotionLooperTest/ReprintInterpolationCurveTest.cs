@@ -1,15 +1,19 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MikuMikuMethods;
 using MikuMikuMethods.VMD;
+using MotionLooper;
 using System.Collections.Generic;
 using System.Linq;
-using MotionLooper;
 
 namespace MotionLooperTest
 {
     [TestClass]
     public class ReprintInterpolationCurveTest
     {
-        List<IVmdInterpolatable> SourceFrames { get; } = new();
+        List<VmdMotionFrame> SourceFrames { get; } = new();
+        (byte X, byte Y) GeteEarly(IVmdInterpolatable frame, InterpolationItem ipItem) => frame.InterpolationCurves[ipItem].EarlyControlePoint;
+        (byte X, byte Y) GeteLate(IVmdInterpolatable frame, InterpolationItem ipItem) => frame.InterpolationCurves[ipItem].LateControlePoint;
+
 
         [TestInitialize]
         public void CreateTestData()
@@ -20,8 +24,6 @@ namespace MotionLooperTest
             (uint Frame, float X, float Y) late = (10, 0.0f, 0.5f);
 
             Add("センター");
-            Add("上半身");
-            Add("下半身");
 
             void Add(string boneName)
             {
@@ -29,7 +31,7 @@ namespace MotionLooperTest
                 SourceFrames.Add(CreateFrame(boneName, late.Frame, late.X, late.Y));
             }
 
-            IVmdInterpolatable CreateFrame(string boneName, uint frame, float xPos, float yPos)
+            VmdMotionFrame CreateFrame(string boneName, uint frame, float xPos, float yPos)
             {
                 var key = new VmdMotionFrame(boneName, frame);
                 foreach (var curve in key.InterpolationCurves)
@@ -42,24 +44,31 @@ namespace MotionLooperTest
         }
 
         [TestMethod]
-        public void TestReprint()
+        public void TestSameFrameReprint()
         {
-            List<IVmdInterpolatable> targetFrames = new();
-            targetFrames.Add(new VmdMotionFrame("センター", 0));
-            targetFrames.Add(new VmdMotionFrame("上半身2", 0));
-            targetFrames.Add(new VmdMotionFrame("センター", 10));
-            targetFrames.Add(new VmdMotionFrame("上半身2", 10));
+            SameCountReprintTest(0, 10);
+        }
 
-            targetFrames.ElementAt(0).InterpolationCurves[MikuMikuMethods.InterpolationItem.XPosition].EarlyControlePointFloat = (1.0f, 0.0f);
+        [TestMethod]
+        public void TestNotSameFrameReprint()
+        {
+            SameCountReprintTest(1, 9);
+        }
+
+        private void SameCountReprintTest(uint startFrame, uint lastFrame)
+        {
+            var targetFrames = new VmdMotionFrame[]
+            {
+                new("センター", startFrame),
+                new("センター", lastFrame),
+            };
 
             var reprinter = new InterpolationCurveReprinter();
             var reprinted = reprinter.Reprint(SourceFrames, targetFrames);
 
-            Assert.AreEqual(1.0f, targetFrames.ElementAt(0).InterpolationCurves[MikuMikuMethods.InterpolationItem.XPosition].EarlyControlePointFloat.X);
-
-            Assert.AreEqual(4, reprinted.Count());
-            Assert.AreEqual(0.5f, reprinted.ElementAt(0).InterpolationCurves[MikuMikuMethods.InterpolationItem.XPosition].EarlyControlePointFloat.X);
-            Assert.AreEqual(0.0f, reprinted.ElementAt(2).InterpolationCurves[MikuMikuMethods.InterpolationItem.XPosition].EarlyControlePointFloat.X);
+            Assert.AreEqual(2, reprinted.Count());
+            Assert.AreEqual(GeteEarly(SourceFrames[0], InterpolationItem.XPosition).X, GeteEarly(reprinted[0], InterpolationItem.XPosition).X);
+            Assert.AreEqual(GeteEarly(SourceFrames[1], InterpolationItem.XPosition).X, GeteEarly(reprinted[1], InterpolationItem.XPosition).X);
         }
     }
 }
