@@ -25,50 +25,49 @@ namespace MotionLooperTest
 
             Add("センター");
 
+            // 指定ボーン名のフレームを生成して補間曲線を設定し SourceFrames に追加する
             void Add(string boneName)
             {
                 SourceFrames.Add(CreateFrame(boneName, early.Frame, early.X, early.Y));
                 SourceFrames.Add(CreateFrame(boneName, late.Frame, late.X, late.Y));
-            }
 
-            VmdMotionFrame CreateFrame(string boneName, uint frame, float xPos, float yPos)
-            {
-                var key = new VmdMotionFrame(boneName, frame);
-                foreach (var curve in key.InterpolationCurves)
+                VmdMotionFrame CreateFrame(string boneName, uint frame, float xPos, float yPos)
                 {
-                    curve.Value.EarlyControlePointFloat = (xPos, yPos);
-                    curve.Value.LateControlePointFloat = (1.0f - xPos, 1.0f - yPos);
+                    var key = new VmdMotionFrame(boneName, frame);
+                    foreach (var curve in key.InterpolationCurves)
+                    {
+                        curve.Value.EarlyControlePointFloat = (xPos, yPos);
+                        curve.Value.LateControlePointFloat = (1.0f - xPos, 1.0f - yPos);
+                    }
+                    return key;
                 }
-                return key;
             }
         }
 
         [TestMethod]
         public void TestSameFrameReprint()
         {
-            SameCountReprintTest(0, 10);
+            SameCountReprintTest(SourceFrames, 0, 10);
         }
 
         [TestMethod]
         public void TestNotSameFrameReprint()
         {
-            SameCountReprintTest(1, 9);
+            SameCountReprintTest(SourceFrames, 1, 9);
         }
 
-        private void SameCountReprintTest(uint startFrame, uint lastFrame)
+        private void SameCountReprintTest(List<VmdMotionFrame> sourceFrames, params uint[] frames)
         {
-            var targetFrames = new VmdMotionFrame[]
-            {
-                new("センター", startFrame),
-                new("センター", lastFrame),
-            };
+            var targetFrames = frames.Select(f => new VmdMotionFrame("センター", f));
 
             var reprinter = new InterpolationCurveReprinter();
-            var reprinted = reprinter.Reprint(SourceFrames, targetFrames);
+            var reprinted = reprinter.Reprint(sourceFrames, targetFrames);
 
-            Assert.AreEqual(2, reprinted.Count());
-            Assert.AreEqual(GeteEarly(SourceFrames[0], InterpolationItem.XPosition).X, GeteEarly(reprinted[0], InterpolationItem.XPosition).X);
-            Assert.AreEqual(GeteEarly(SourceFrames[1], InterpolationItem.XPosition).X, GeteEarly(reprinted[1], InterpolationItem.XPosition).X);
+            Assert.AreEqual(targetFrames.Count(), reprinted.Count());
+            foreach ((VmdMotionFrame Source, VmdMotionFrame Reprinted) frame in sourceFrames.Zip(reprinted))
+            {
+                Assert.AreEqual(GeteEarly(frame.Source, InterpolationItem.XPosition).X, GeteEarly(frame.Reprinted, InterpolationItem.XPosition).X);
+            }
         }
     }
 }
