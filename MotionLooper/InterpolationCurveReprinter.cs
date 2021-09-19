@@ -8,7 +8,7 @@ namespace MotionLooper
     public class InterpolationCurveReprinter
     {
         public T[] Reprint<T>(IEnumerable<T> sourceFrames, IEnumerable<T> targetFrames) where T : IVmdInterpolatable, IVmdFrame =>
-            targetFrames.Select(t =>
+            targetFrames.AsParallel().Select(t =>
             {
                 var target = (T)t.Clone();
 
