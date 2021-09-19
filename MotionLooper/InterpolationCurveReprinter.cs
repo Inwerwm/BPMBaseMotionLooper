@@ -7,13 +7,11 @@ namespace MotionLooper
 {
     public class InterpolationCurveReprinter
     {
-        public T[] Reprint<T>(IEnumerable<T> sourceFrames, IEnumerable<T> targetFrames) where T : IVmdInterpolatable, IVmdFrame =>
-            targetFrames.AsParallel().Select(t =>
+        public void Reprint<T>(IEnumerable<T> sourceFrames, List<T> targetFrames) where T : class, IVmdInterpolatable, IVmdFrame =>
+            targetFrames.AsParallel().ForAll(target =>
             {
-                var target = (T)t.Clone();
-
                 uint memo = uint.MaxValue;
-                T? nearest = default;
+                T? nearest = null;
                 foreach (var source in sourceFrames.OrderBy(f => f.Frame))
                 {
                     var dif = source.Frame < target.Frame ? target.Frame - source.Frame : source.Frame - target.Frame;
@@ -27,8 +25,6 @@ namespace MotionLooper
                 {
                     target.InterpolationCurves[curveType] = nearest?.InterpolationCurves[curveType] ?? new();
                 }
-
-                return target;
-            }).OrderBy(f => f.Frame).ToArray();
+            });
     }
 }

@@ -58,13 +58,12 @@ namespace MotionLooperTest
 
         private void SameCountReprintTest(List<VmdMotionFrame> sourceFrames, params uint[] frames)
         {
-            var targetFrames = frames.Select(f => new VmdMotionFrame("センター", f));
+            var targetFrames = frames.Select(f => new VmdMotionFrame("センター", f)).ToList();
 
             var reprinter = new InterpolationCurveReprinter();
-            var reprinted = reprinter.Reprint(sourceFrames, targetFrames);
+            reprinter.Reprint(sourceFrames, targetFrames);
 
-            Assert.AreEqual(targetFrames.Count(), reprinted.Count());
-            foreach ((VmdMotionFrame Source, VmdMotionFrame Reprinted) frame in sourceFrames.Zip(reprinted))
+            foreach ((VmdMotionFrame Source, VmdMotionFrame Reprinted) frame in sourceFrames.Zip(targetFrames))
             {
                 Assert.AreEqual(GeteEarly(frame.Source, InterpolationItem.XPosition).X, GeteEarly(frame.Reprinted, InterpolationItem.XPosition).X);
             }
