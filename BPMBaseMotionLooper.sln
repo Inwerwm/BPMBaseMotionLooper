@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMBaseMotionLooper", "BPMBaseMotionLooper\BPMBaseMotionLooper.csproj", "{CEF80AD5-8074-4310-A0AF-C24822910C47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionLooper", "MotionLooper\MotionLooper.csproj", "{F0EE3832-69E0-4792-928B-F5DE8A7CCC27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotionLooper", "MotionLooper\MotionLooper.csproj", "{F0EE3832-69E0-4792-928B-F5DE8A7CCC27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionLooperTest", "MotionLooperTest\MotionLooperTest.csproj", "{DDFCA731-1826-40E0-AE78-4E60C378D7AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotionLooperTest", "MotionLooperTest\MotionLooperTest.csproj", "{DDFCA731-1826-40E0-AE78-4E60C378D7AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
