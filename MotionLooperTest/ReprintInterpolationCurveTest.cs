@@ -61,7 +61,7 @@ namespace MotionLooperTest
             var targetFrames = frames.Select(f => new VmdMotionFrame("センター", f)).ToList();
 
             var reprinter = new InterpolationCurveReprinter();
-            reprinter.Reprint(sourceFrames, targetFrames);
+            reprinter.ReprintFromNearest(sourceFrames, targetFrames);
 
             foreach ((VmdMotionFrame Source, VmdMotionFrame Reprinted) frame in sourceFrames.Zip(targetFrames))
             {

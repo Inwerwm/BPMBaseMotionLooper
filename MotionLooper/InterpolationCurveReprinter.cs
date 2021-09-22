@@ -7,7 +7,7 @@ namespace MotionLooper
 {
     public class InterpolationCurveReprinter
     {
-        public void Reprint<T>(IEnumerable<T> sourceFrames, List<T> targetFrames) where T : class, IVmdInterpolatable, IVmdFrame =>
+        public void ReprintFromNearest<T>(IEnumerable<T> sourceFrames, List<T> targetFrames) where T : class, IVmdInterpolatable, IVmdFrame =>
             targetFrames.AsParallel().ForAll(target =>
             {
                 uint memo = uint.MaxValue;
