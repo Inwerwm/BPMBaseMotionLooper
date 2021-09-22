@@ -68,5 +68,11 @@ namespace MotionLooperTest
                 Assert.AreEqual(GeteEarly(frame.Source, InterpolationItem.XPosition).X, GeteEarly(frame.Reprinted, InterpolationItem.XPosition).X);
             }
         }
+
+        [TestMethod]
+        public void TestPutFromScore()
+        {
+            
+        }
     }
 }

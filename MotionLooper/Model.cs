@@ -1,5 +1,7 @@
 ﻿using MikuMikuMethods.VMD;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace MotionLooper
 {
@@ -8,12 +10,14 @@ namespace MotionLooper
         public DuplicationCounter DuplicationCounter { get; }
         public IntervalCalculator IntervalCalculator { get; }
         public FrameDuplicator FrameDuplicator { get; }
+        public InterpolationCurveReprinter InterpolationCurveReprinter { get; }
 
         public Model()
         {
             DuplicationCounter = new();
             IntervalCalculator = new(30);
             FrameDuplicator = new();
+            InterpolationCurveReprinter = new();
         }
 
         public VocaloidMotionData ReadFile(string filePath) =>
@@ -23,5 +27,13 @@ namespace MotionLooper
 
         public VocaloidMotionData CreateLoopMotion(VocaloidMotionData vmd) =>
             FrameDuplicator.CreateLoopMotion(vmd, IntervalCalculator, DuplicationCounter);
+
+        public void ReprintMorph<T>(IEnumerable<T> sourceFrames, List<T> targetFrames) where T : class, IVmdInterpolatable, IVmdFrame
+        {
+            InterpolationCurveReprinter.ReprintFromNearest(sourceFrames, targetFrames);
+        }
+
+        public VocaloidMotionData FollowPut(VocaloidMotionData source, string sourceItemName, VocaloidMotionData target) =>
+            InterpolationCurveReprinter.PutFromScore(source, sourceItemName, target);
     }
 }
