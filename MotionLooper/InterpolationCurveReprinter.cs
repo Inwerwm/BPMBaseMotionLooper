@@ -107,7 +107,6 @@ namespace MotionLooper
                         default:
                             break;
                     }
-
                 }
             }
 
