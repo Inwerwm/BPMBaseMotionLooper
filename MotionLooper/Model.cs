@@ -28,9 +28,12 @@ namespace MotionLooper
         public VocaloidMotionData CreateLoopMotion(VocaloidMotionData vmd) =>
             FrameDuplicator.CreateLoopMotion(vmd, IntervalCalculator, DuplicationCounter);
 
-        public void ReprintMorph<T>(IEnumerable<T> sourceFrames, List<T> targetFrames) where T : class, IVmdInterpolatable, IVmdFrame
+        public void ReprintMorph(VocaloidMotionData source, VocaloidMotionData target)
         {
-            FrameReprinter.ReprintFromNearest(sourceFrames, targetFrames);
+            if (source.CameraFrames.Any() && target.CameraFrames.Any())
+                FrameReprinter.ReprintFromNearest(source.CameraFrames, target.CameraFrames);
+            if (source.MotionFrames.Any() && target.MotionFrames.Any())
+                FrameReprinter.ReprintFromNearest(source.MotionFrames, target.MotionFrames);
         }
 
         public VocaloidMotionData FollowPut(VocaloidMotionData source, string sourceItemName, VocaloidMotionData target) =>
