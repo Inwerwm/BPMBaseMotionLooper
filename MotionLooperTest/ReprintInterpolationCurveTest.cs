@@ -53,7 +53,9 @@ namespace MotionLooperTest
         [TestMethod]
         public void TestNotSameFrameReprint()
         {
+            SameCountReprintTest(SourceFrames, 4, 6);
             SameCountReprintTest(SourceFrames, 1, 9);
+            SameCountReprintTest(SourceFrames, 1, 11);
         }
 
         private void SameCountReprintTest(List<VmdMotionFrame> sourceFrames, params uint[] frames)
