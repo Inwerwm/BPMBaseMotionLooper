@@ -62,7 +62,7 @@ namespace MotionLooperTest
         {
             var targetFrames = frames.Select(f => new VmdMotionFrame("センター", f)).ToList();
 
-            var reprinter = new InterpolationCurveReprinter();
+            var reprinter = new FrameReprinter();
             reprinter.ReprintFromNearest(sourceFrames, targetFrames);
 
             foreach ((VmdMotionFrame Source, VmdMotionFrame Reprinted) frame in sourceFrames.Zip(targetFrames))
@@ -92,7 +92,7 @@ namespace MotionLooperTest
             target.AddFrame(new VmdMotionFrame("ボーン", 0) { Position = new(1, 1, 1) });
             target.AddFrame(new VmdMotionFrame("ボーン", 1) { Position = new(2, 2, 2) });
 
-            var reprinter = new InterpolationCurveReprinter();
+            var reprinter = new FrameReprinter();
             var result = reprinter.PutFromScore(source, "センター", target);
             var r = result.MotionFrames;
 

@@ -10,14 +10,14 @@ namespace MotionLooper
         public DuplicationCounter DuplicationCounter { get; }
         public IntervalCalculator IntervalCalculator { get; }
         public FrameDuplicator FrameDuplicator { get; }
-        public InterpolationCurveReprinter InterpolationCurveReprinter { get; }
+        public FrameReprinter FrameReprinter { get; }
 
         public Model()
         {
             DuplicationCounter = new();
             IntervalCalculator = new(30);
             FrameDuplicator = new();
-            InterpolationCurveReprinter = new();
+            FrameReprinter = new();
         }
 
         public VocaloidMotionData ReadFile(string filePath) =>
@@ -30,10 +30,10 @@ namespace MotionLooper
 
         public void ReprintMorph<T>(IEnumerable<T> sourceFrames, List<T> targetFrames) where T : class, IVmdInterpolatable, IVmdFrame
         {
-            InterpolationCurveReprinter.ReprintFromNearest(sourceFrames, targetFrames);
+            FrameReprinter.ReprintFromNearest(sourceFrames, targetFrames);
         }
 
         public VocaloidMotionData FollowPut(VocaloidMotionData source, string sourceItemName, VocaloidMotionData target) =>
-            InterpolationCurveReprinter.PutFromScore(source, sourceItemName, target);
+            FrameReprinter.PutFromScore(source, sourceItemName, target);
     }
 }

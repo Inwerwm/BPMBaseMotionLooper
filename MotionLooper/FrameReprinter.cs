@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MotionLooper
 {
-    public class InterpolationCurveReprinter
+    public class FrameReprinter
     {
         /// <summary>
         /// ターゲットフレームの補間曲線をソースの最近傍フレームから転写する
