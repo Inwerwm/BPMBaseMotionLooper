@@ -72,7 +72,37 @@ namespace MotionLooperTest
         [TestMethod]
         public void TestPutFromScore()
         {
-            
+            var source = new VocaloidMotionData();
+            var target = new VocaloidMotionData();
+
+            for (uint i = 0; i < 10; i++)
+            {
+                var frame = new VmdMotionFrame("センター", i);
+                foreach (var curve in frame.InterpolationCurves.Keys)
+                {
+                    frame.InterpolationCurves[curve].EarlyControlePointFloat = (i * 0.1f, 0);
+                    frame.InterpolationCurves[curve].LateControlePointFloat = (0, i * 0.1f);
+                }
+
+                source.AddFrame(frame);
+            }
+
+            target.AddFrame(new VmdMotionFrame("ボーン", 0) { Position = new(1, 1, 1) });
+            target.AddFrame(new VmdMotionFrame("ボーン", 1) { Position = new(2, 2, 2) });
+
+            var reprinter = new InterpolationCurveReprinter();
+            var result = reprinter.PutFromScore(source, "センター", target);
+            var r = result.MotionFrames;
+
+            foreach ((VmdMotionFrame Source, VmdMotionFrame Result) item in source.MotionFrames.Zip(r))
+            {
+                Assert.AreEqual(item.Source.Frame, item.Result.Frame);
+                foreach (var curve in item.Source.InterpolationCurves.Keys)
+                {
+                    Assert.AreEqual(item.Source.InterpolationCurves[curve].EarlyControlePoint, item.Result.InterpolationCurves[curve].EarlyControlePoint);
+                    Assert.AreEqual(item.Source.InterpolationCurves[curve].LateControlePoint, item.Result.InterpolationCurves[curve].LateControlePoint);
+                }
+            }
         }
     }
 }
