@@ -10,62 +10,120 @@
         GlowBrush="Black" BorderThickness="0" FontSize="20" FontFamily="Consolas, Yu Gothic Medium" Closed="MetroWindow_Closed" AllowDrop="True" PreviewDragOver="MetroWindow_PreviewDragOver" Drop="MetroWindow_Drop">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="240"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="TextBoxFilePath" IsReadOnly="True" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" TextWrapping="Wrap" Margin="20,0,0,10" BorderThickness="0" VerticalAlignment="Bottom" FontSize="20" Text="{Binding FilePath.Value}"/>
-        <Line Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10" />
-        <Button x:Name="ButtonOpenFile" Grid.Column="4" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" Command="{Binding OpenFile}" />
+        <TextBox x:Name="TextBoxFilePath" IsReadOnly="True" Grid.Column="0" Grid.Row="0" TextWrapping="Wrap" Margin="20,0,0,10" BorderThickness="0" VerticalAlignment="Bottom" FontSize="20" Text="{Binding FilePath.Value}"/>
+        <Line Grid.Column="0" Grid.Row="0" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10" />
+        <Button x:Name="ButtonOpenFile" Grid.Column="1" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" Command="{Binding OpenFile}" />
 
-        <TextBlock Text="配置間隔" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,10"/>
-        <Controls:NumericUpDown x:Name="NumericInterval" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Margin="10,0,10,10" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding Interval.Value}" />
-        <Line Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.Accent2}" Stretch="Fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10,0,0,0" Opacity="0.3" />
-        <Line Grid.Column="3"  Grid.Row="1" Grid.RowSpan="4" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.Accent2}" Stretch="Fill" Y1="0" Y2="1" HorizontalAlignment="Right" Opacity="0.3" />
+        <TabControl Grid.Row="1" Grid.ColumnSpan="2">
+            <TabItem Header="複製">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="80"/>
+                    </Grid.RowDefinitions>
 
-        <TextBlock Text="BPM" Grid.Column="0" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
-        <TextBlock Text="周期" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
-        <TextBlock Text="拍子" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
-        <TextBlock Text="ループ数" Grid.Column="3" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
+                    <TextBlock Text="配置間隔" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,10"/>
+                    <Controls:NumericUpDown x:Name="NumericInterval" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Margin="10,0,10,10" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding Interval.Value}" />
+                    <Line Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.Accent2}" Stretch="Fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10,0,0,0" Opacity="0.3" />
+                    <Line Grid.Column="3"  Grid.Row="0" Grid.RowSpan="4" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.Accent2}" Stretch="Fill" Y1="0" Y2="1" HorizontalAlignment="Right" Opacity="0.3" />
 
-        <Controls:NumericUpDown x:Name="NumericBPM" Grid.Column="0" Grid.Row="3" Margin="10,0,10,0" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding BPM.Value}" />
-        <Controls:NumericUpDown x:Name="NumericFreq" Grid.Column="1" Grid.Row="3" Margin="10,0,10,0" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding Frequency.Value}" />
-        <Controls:NumericUpDown x:Name="NumericBeat" Grid.Column="2" Grid.Row="3" Margin="10,0,10,0" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding Beat.Value}" />
-        <Controls:NumericUpDown x:Name="NumericLoopNum" Grid.Column="3" Grid.Row="3" Margin="10,0,10,0" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding LoopNum.Value}" />
+                    <TextBlock Text="BPM" Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
+                    <TextBlock Text="周期" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
+                    <TextBlock Text="拍子" Grid.Column="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
+                    <TextBlock Text="ループ数" Grid.Column="3" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
 
-        <TextBlock Text="設置回数" Grid.Column="4" Grid.Row="1" TextAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0"/>
-        <TextBox x:Name="TextBoxElementNum" IsReadOnly="True" Grid.Column="4" Grid.Row="2" TextWrapping="Wrap" Margin="20,-14,20,0" BorderThickness="0" TextAlignment="Center" VerticalAlignment="Top" FontSize="36" Text="{Binding ElementNum.Value}"/>
-        <Line Grid.Column="4" Grid.Row="2" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="20,0,20,5" />
+                    <Controls:NumericUpDown x:Name="NumericBPM" Grid.Column="0" Grid.Row="2" Margin="10,0,10,0" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding BPM.Value}" />
+                    <Controls:NumericUpDown x:Name="NumericFreq" Grid.Column="1" Grid.Row="2" Margin="10,0,10,0" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding Frequency.Value}" />
+                    <Controls:NumericUpDown x:Name="NumericBeat" Grid.Column="2" Grid.Row="2" Margin="10,0,10,0" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding Beat.Value}" />
+                    <Controls:NumericUpDown x:Name="NumericLoopNum" Grid.Column="3" Grid.Row="2" Margin="10,0,10,0" Minimum="1" FontSize="20" TextAlignment="Left" Value="{Binding LoopNum.Value}" />
 
-        <Button x:Name="ButtonExecute" Grid.Column="4" Grid.Row="3" Content="実行" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5,0,5,0" FontSize="15" VerticalAlignment="Center" Command="{Binding ExecuteGeneration}"/>
+                    <TextBlock Text="設置回数" Grid.Column="4" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                    <TextBox x:Name="TextBoxElementNum" IsReadOnly="True" Grid.Column="4" Grid.Row="1" TextWrapping="Wrap" Margin="20,-14,20,0" BorderThickness="0" TextAlignment="Center" VerticalAlignment="Top" FontSize="36" Text="{Binding ElementNum.Value}"/>
+                    <Line Grid.Column="4" Grid.Row="1" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="20,0,20,5" />
 
-        <TextBlock Grid.Column="0" Grid.Row="4" Margin="10,0,10,0" FontSize="15" TextWrapping="Wrap">
-            BPMと配置間隔は<LineBreak/>
-            連動します。
-        </TextBlock>
-        <TextBlock Grid.Column="1" Grid.Row="4" Margin="10,0,10,0" FontSize="15" TextWrapping="Wrap">
-            何拍に1回の設置か<LineBreak/>
-            を決めます。
-        </TextBlock>
-        <Line Grid.Column="2" Grid.Row="4" StrokeThickness="2" Stroke="Black" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,4,0,0" Width="28" />
-        <TextBlock Grid.Column="2" Grid.Row="4" Margin="17,4,10,0" Text="4" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="20" TextWrapping="NoWrap"/>
-        <TextBlock Grid.Column="3" Grid.Row="4" Margin="10,0,10,0" FontSize="15" TextWrapping="Wrap">
-            何回ループさせるか<LineBreak/>
-            を決めます。
-        </TextBlock>
-        <Controls:ToggleSwitch x:Name="SwitchDecrement" Grid.Column="4" Grid.Row="4" Header="設置回数を 1 減らす" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center" ContentDirection="RightToLeft" Controls:ControlsHelper.ContentCharacterCasing="Normal" Controls:HeaderedControlHelper.HeaderHorizontalContentAlignment="Left" Controls:HeaderedControlHelper.HeaderVerticalContentAlignment="Stretch" Controls:HeaderedControlHelper.HeaderMargin="0,0,0,0" Controls:HeaderedControlHelper.HeaderFontStretch="Normal" Controls:HeaderedControlHelper.HeaderFontWeight="Normal" Margin="20,5,0,0" IsOn="{Binding EnableDecrement.Value}" />
+                    <Button x:Name="ButtonExecute" Grid.Column="4" Grid.Row="2" Content="実行" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5,0,5,0" FontSize="15" VerticalAlignment="Center" Command="{Binding ExecuteGeneration}"/>
 
-        <TextBox x:Name="TextBoxLog" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" IsReadOnly="True" FontSize="20" Style="{DynamicResource MahApps.Styles.TextBox}" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Log.Value}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="3" Margin="10,0,10,0" FontSize="15" TextWrapping="Wrap">
+                        BPMと配置間隔は<LineBreak/>
+                        連動します。
+                    </TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="3" Margin="10,0,10,0" FontSize="15" TextWrapping="Wrap">
+                        何拍に1回の設置か<LineBreak/>
+                        を決めます。
+                    </TextBlock>
+                    <Line Grid.Column="2" Grid.Row="3" StrokeThickness="2" Stroke="White" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,4,0,0" Width="28" />
+                    <TextBlock Grid.Column="2" Grid.Row="3" Margin="17,4,10,0" Text="4" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="20" TextWrapping="NoWrap"/>
+                    <TextBlock Grid.Column="3" Grid.Row="3" Margin="10,0,10,0" FontSize="15" TextWrapping="Wrap">
+                        何回ループさせるか<LineBreak/>
+                        を決めます。
+                    </TextBlock>
+                    <Controls:ToggleSwitch x:Name="SwitchDecrement" Grid.Column="4" Grid.Row="3" Header="設置回数を 1 減らす" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalContentAlignment="Center" ContentDirection="RightToLeft" Controls:ControlsHelper.ContentCharacterCasing="Normal" Controls:HeaderedControlHelper.HeaderHorizontalContentAlignment="Left" Controls:HeaderedControlHelper.HeaderVerticalContentAlignment="Stretch" Controls:HeaderedControlHelper.HeaderMargin="0,0,0,0" Controls:HeaderedControlHelper.HeaderFontStretch="Normal" Controls:HeaderedControlHelper.HeaderFontWeight="Normal" Margin="20,5,0,0" IsOn="{Binding EnableDecrement.Value}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="転写">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Column="0" Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            転写元VMD
+                        </TextBlock>
+                        <TextBox x:Name="TextBoxReprintSourceFilePath" IsReadOnly="True" Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" Margin="20,0,0,10" BorderThickness="0" VerticalAlignment="Bottom" FontSize="20" Text="{Binding FilePath.Value}"/>
+                        <Line Grid.Column="1" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10" />
+                    </Grid>
+                    <Button x:Name="ButtonOpenReprintSourceFile" Grid.Column="1" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" Command="{Binding OpenFile}" />
+                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" UseLayoutRounding="False">
+                        <Button x:Name="ButtonReprintMorph" Content="最近傍フレームからモーフを転写" FontSize="15" Margin="5,0,5,0"/>
+                        <Rectangle Height="1" Fill="Gray" Margin="0,10,0,0" />
+                        <Grid Margin="5,10,5,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="210"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15">
+                                位置/補間曲線の転写元項目名
+                            </TextBlock>
+                            <Controls:DropDownButton Name="ItemOfPuttingBase" Grid.Row="0" Grid.Column="1" />
+                            <Button Grid.Row="1" Grid.ColumnSpan="2" x:Name="ButtonPutFromScore" Content="転写元VMDのフレーム位置に対象モーションを設置" FontSize="15"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
+        <TextBox x:Name="TextBoxLog" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" FontSize="20" Style="{DynamicResource MahApps.Styles.TextBox}" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Log.Value}"/>
     </Grid>
 </Controls:MetroWindow>
