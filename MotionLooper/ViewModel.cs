@@ -36,6 +36,7 @@ namespace MotionLooper
         public ReactiveCommand OpenFile { get; }
         public ReactiveCommand OpenReprintSourceFile { get;}
         public ReactiveCommand ExecuteGeneration { get; }
+        public ReactiveCommand ExecuteMorphReprinting { get; }
         private Action<string> AppendLog { get; }
 
         private Model Model { get; }
@@ -52,7 +53,6 @@ namespace MotionLooper
             EnableDecrement = new ReactiveProperty<bool>(Properties.Settings.Default.Decrement).AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
 
-
             IsFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
             IsReprintSourceFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
             IsDuplicationCountVaild = new ReactiveProperty<bool>().AddTo(Disposable);
@@ -61,6 +61,7 @@ namespace MotionLooper
             OpenFile = new ReactiveCommand();
             OpenReprintSourceFile = new ReactiveCommand();
             ExecuteGeneration = new[] { IsDuplicationCountVaild, IsFileLoaded }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
+            ExecuteMorphReprinting = new[] { IsFileLoaded, IsReprintSourceFileLoaded }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
 
             AppendLog = logAppender;
 
@@ -146,6 +147,41 @@ namespace MotionLooper
                     loopMotion.Write(savePath);
                     AppendLog($"出力が完了しました。");
                     AppendLog($"フレーム数 : {sourceVMD.Frames.Count()} → {loopMotion.Frames.Count()}");
+                    AppendLog($"保存先 : {savePath}");
+                    AppendLog(Environment.NewLine);
+                }
+                catch (FileNotFoundException)
+                {
+                    AppendLog("ファイルが見つかりませんでした。");
+                    FilePath.Value = null;
+                }
+                catch (InvalidDataException)
+                {
+                    AppendLog("非VMDファイルが指定されました。");
+                    FilePath.Value = null;
+                }
+                catch (Exception ex)
+                {
+                    AppendLog($"エラーが発生しました。{ex.Message}");
+                }
+            });
+            ExecuteMorphReprinting.Subscribe(_ =>
+            {
+                try
+                {
+                    var reprintTargetPath = FilePath.Value ?? "";
+                    var reprintTargetVMD = Model.ReadFile(reprintTargetPath);
+
+                    var reprintSourcePath = ReprintSourceFilePath.Value ?? "";
+                    var reprintSourceVmd = Model.ReadFile(reprintSourcePath);
+
+                    var savePath = Path.Combine(Path.GetDirectoryName(reprintTargetPath) ?? "", Path.GetFileNameWithoutExtension(reprintTargetPath) + "_morphReprenmted.vmd");
+
+                    Model.ReprintMorph(reprintSourceVmd, reprintTargetVMD);
+                    reprintTargetVMD.Write(savePath);
+
+                    AppendLog("出力が完了しました。");
+                    AppendLog($"{Path.GetFileName(reprintTargetPath)} の各フレームに {Path.GetFileName(reprintSourcePath)} 内の近傍フレームのモーフを転写しました");
                     AppendLog($"保存先 : {savePath}");
                     AppendLog(Environment.NewLine);
                 }
