@@ -102,7 +102,7 @@
                     </Grid>
                     <Button x:Name="ButtonOpenReprintSourceFile" Grid.Column="1" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" Command="{Binding OpenReprintSourceFile}" />
                     <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" UseLayoutRounding="False">
-                        <Button x:Name="ButtonReprintMorph" Content="最近傍フレームからモーフを転写" FontSize="15" Margin="5,0,5,0" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Command="{Binding ExecuteMorphReprinting}"/>
+                        <Button x:Name="ButtonReprintMorph" Content="転写元VMDの最近傍フレームからモーフを転写" FontSize="15" Margin="5,0,5,0" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Command="{Binding ExecuteMorphReprinting}"/>
                         <Rectangle Height="1" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Margin="0,10,0,0" />
                         <Grid Margin="5,10,5,0">
                             <Grid.ColumnDefinitions>
@@ -116,8 +116,8 @@
                             <TextBlock Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15">
                                 位置/補間曲線の転写元項目名
                             </TextBlock>
-                            <ComboBox Name="ItemOfPuttingBase" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding ReprintSourceItemNames}" DropDownOpened="ItemOfPuttingBase_DropDownOpened"/>
-                            <Button Grid.Row="1" Grid.ColumnSpan="2" x:Name="ButtonPutFromScore" Content="転写元VMDのフレーム位置に対象モーションを設置" FontSize="15" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"/>
+                            <ComboBox Name="ItemOfPuttingBase" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding ReprintSourceItemNames}" SelectedItem="{Binding SelectedPuttingBaseItem.Value}" DropDownOpened="ItemOfPuttingBase_DropDownOpened"/>
+                            <Button Grid.Row="1" Grid.ColumnSpan="2" x:Name="ButtonPutFromScore" Content="転写元VMDのフレーム位置に対象モーションを設置" FontSize="15" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Command="{Binding ExecutePutFromScore}"/>
                         </Grid>
                     </StackPanel>
                 </Grid>

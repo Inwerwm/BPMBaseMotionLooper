@@ -27,10 +27,12 @@ namespace MotionLooper
         public ReactiveProperty<int> LoopNum { get; }
         public ReactiveProperty<bool> EnableDecrement { get; }
         public ReactiveProperty<int> ElementNum { get; }
+        public ReactiveProperty<object> SelectedPuttingBaseItem { get; }
 
         public ReactiveProperty<bool> IsFileLoaded { get; }
         public ReactiveProperty<bool> IsReprintSourceFileLoaded { get; }
         public ReactiveProperty<bool> IsDuplicationCountVaild { get; }
+        public ReactiveProperty<bool> IsPuttingBaseItemSelected { get; }
         public ReactiveProperty<string> Log { get; }
 
         public ReactiveCollection<string> ReprintSourceItemNames { get; }
@@ -40,6 +42,7 @@ namespace MotionLooper
         public ReactiveCommand LoadReprintSourceItemNames { get; }
         public ReactiveCommand ExecuteGeneration { get; }
         public ReactiveCommand ExecuteMorphReprinting { get; }
+        public ReactiveCommand ExecutePutFromScore { get; }
         private Action<string> AppendLog { get; }
 
         private Model Model { get; }
@@ -55,12 +58,15 @@ namespace MotionLooper
             LoopNum = new ReactiveProperty<int>(Properties.Settings.Default.LoopNum).AddTo(Disposable);
             EnableDecrement = new ReactiveProperty<bool>(Properties.Settings.Default.Decrement).AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
+            SelectedPuttingBaseItem = new ReactiveProperty<object>().AddTo(Disposable);
 
             ReprintSourceItemNames = new ReactiveCollection<string>().AddTo(Disposable);
 
             IsFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
             IsReprintSourceFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
             IsDuplicationCountVaild = new ReactiveProperty<bool>().AddTo(Disposable);
+            IsPuttingBaseItemSelected = new ReactiveProperty<bool>().AddTo(Disposable);
+
             Log = new ReactiveProperty<string>().AddTo(Disposable);
 
             OpenFile = new ReactiveCommand();
@@ -68,6 +74,7 @@ namespace MotionLooper
             LoadReprintSourceItemNames = new ReactiveCommand();
             ExecuteGeneration = new[] { IsDuplicationCountVaild, IsFileLoaded }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
             ExecuteMorphReprinting = new[] { IsFileLoaded, IsReprintSourceFileLoaded }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
+            ExecutePutFromScore = new[] { IsFileLoaded, IsReprintSourceFileLoaded, IsPuttingBaseItemSelected }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
 
             AppendLog = logAppender;
 
@@ -100,6 +107,8 @@ namespace MotionLooper
                 Interval.Value = Model.IntervalCalculator.Interval;
                 ignoreChange = false;
             });
+
+            SelectedPuttingBaseItem.Subscribe(item => IsPuttingBaseItemSelected.Value = !(item is null));
 
             Action<bool> UpdateLoopParam = isInterval =>
             {
@@ -203,6 +212,42 @@ namespace MotionLooper
 
                     AppendLog("出力が完了しました。");
                     AppendLog($"{Path.GetFileName(reprintTargetPath)} の各フレームに {Path.GetFileName(reprintSourcePath)} 内の近傍フレームのモーフを転写しました");
+                    AppendLog($"保存先 : {savePath}");
+                    AppendLog(Environment.NewLine);
+                }
+                catch (FileNotFoundException)
+                {
+                    AppendLog("ファイルが見つかりませんでした。");
+                    FilePath.Value = null;
+                }
+                catch (InvalidDataException)
+                {
+                    AppendLog("非VMDファイルが指定されました。");
+                    FilePath.Value = null;
+                }
+                catch (Exception ex)
+                {
+                    AppendLog($"エラーが発生しました。{ex.Message}");
+                }
+            });
+            ExecutePutFromScore.Subscribe(_ =>
+            {
+                try
+                {
+                    var reprintTargetPath = FilePath.Value ?? "";
+                    var reprintTargetVMD = Model.ReadFile(reprintTargetPath);
+
+                    var reprintSourcePath = ReprintSourceFilePath.Value ?? "";
+                    var reprintSourceVmd = Model.ReadFile(reprintSourcePath);
+
+                    var reprintSourceItemName = SelectedPuttingBaseItem.Value as string ?? string.Empty;
+
+                    var savePath = Path.Combine(Path.GetDirectoryName(reprintTargetPath) ?? "", Path.GetFileNameWithoutExtension(reprintTargetPath) + "_followingPut.vmd");
+
+                    Model.FollowPut(reprintSourceVmd, reprintSourceItemName, reprintTargetVMD).Write(savePath);
+
+                    AppendLog("出力が完了しました。");
+                    AppendLog($"{Path.GetFileName(reprintTargetPath)} の各フレームを {Path.GetFileName(reprintSourcePath)} 内の {reprintSourceItemName} と同じフレーム位置に設置しました");
                     AppendLog($"保存先 : {savePath}");
                     AppendLog(Environment.NewLine);
                 }
