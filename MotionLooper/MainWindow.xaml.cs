@@ -31,7 +31,7 @@ namespace MotionLooper
 
         private void MetroWindow_Drop(object sender, DragEventArgs e)
         {
-            ((ViewModel)DataContext).ReadFile(((string[])e.Data.GetData(DataFormats.FileDrop))[0]);
+            ((ViewModel)DataContext).ReadFile(((string[])e.Data.GetData(DataFormats.FileDrop))[0], ((ViewModel)DataContext).FilePath);
         }
     }
 }

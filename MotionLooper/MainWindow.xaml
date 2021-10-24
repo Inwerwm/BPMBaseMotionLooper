@@ -97,13 +97,13 @@
                         <TextBlock Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">
                             転写元VMD
                         </TextBlock>
-                        <TextBox x:Name="TextBoxReprintSourceFilePath" IsReadOnly="True" Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" Margin="20,0,0,10" BorderThickness="0" VerticalAlignment="Bottom" FontSize="20" Text="{Binding FilePath.Value}"/>
+                        <TextBox x:Name="TextBoxReprintSourceFilePath" IsReadOnly="True" Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" Margin="20,0,0,10" BorderThickness="0" VerticalAlignment="Bottom" FontSize="20" Text="{Binding ReprintSourceFilePath.Value}"/>
                         <Line Grid.Column="1" StrokeThickness="1" Stroke="{DynamicResource MahApps.Brushes.AccentBase}" Stretch="fill" X1="0" X2="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="10" />
                     </Grid>
-                    <Button x:Name="ButtonOpenReprintSourceFile" Grid.Column="1" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" Command="{Binding OpenFile}" />
+                    <Button x:Name="ButtonOpenReprintSourceFile" Grid.Column="1" Grid.Row="0" Content="ファイルを開く" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Margin="5" FontSize="15" VerticalAlignment="Center" Command="{Binding OpenReprintSourceFile}" />
                     <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" UseLayoutRounding="False">
-                        <Button x:Name="ButtonReprintMorph" Content="最近傍フレームからモーフを転写" FontSize="15" Margin="5,0,5,0"/>
-                        <Rectangle Height="1" Fill="Gray" Margin="0,10,0,0" />
+                        <Button x:Name="ButtonReprintMorph" Content="最近傍フレームからモーフを転写" FontSize="15" Margin="5,0,5,0" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"/>
+                        <Rectangle Height="1" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Margin="0,10,0,0" />
                         <Grid Margin="5,10,5,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="210"/>
@@ -117,7 +117,7 @@
                                 位置/補間曲線の転写元項目名
                             </TextBlock>
                             <Controls:DropDownButton Name="ItemOfPuttingBase" Grid.Row="0" Grid.Column="1" />
-                            <Button Grid.Row="1" Grid.ColumnSpan="2" x:Name="ButtonPutFromScore" Content="転写元VMDのフレーム位置に対象モーションを設置" FontSize="15"/>
+                            <Button Grid.Row="1" Grid.ColumnSpan="2" x:Name="ButtonPutFromScore" Content="転写元VMDのフレーム位置に対象モーションを設置" FontSize="15" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"/>
                         </Grid>
                     </StackPanel>
                 </Grid>

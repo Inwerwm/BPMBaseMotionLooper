@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -34,6 +34,7 @@ namespace MotionLooper
         public ReactiveProperty<string> Log { get; }
 
         public ReactiveCommand OpenFile { get; }
+        public ReactiveCommand OpenReprintSourceFile { get;}
         public ReactiveCommand ExecuteGeneration { get; }
         private Action<string> AppendLog { get; }
 
@@ -42,6 +43,7 @@ namespace MotionLooper
         public ViewModel(Action<string> logAppender)
         {
             FilePath = new ReactiveProperty<string?>(Properties.Settings.Default.FilePath).AddTo(Disposable);
+            ReprintSourceFilePath = new ReactiveProperty<string?>(Properties.Settings.Default.ReprintSourceFilePath).AddTo(Disposable);
             Interval = new ReactiveProperty<decimal?>(Properties.Settings.Default.Interval).AddTo(Disposable);
             BPM = new ReactiveProperty<decimal?>(Properties.Settings.Default.BPM).AddTo(Disposable);
             Frequency = new ReactiveProperty<int>(Properties.Settings.Default.Frequency).AddTo(Disposable);
@@ -50,11 +52,14 @@ namespace MotionLooper
             EnableDecrement = new ReactiveProperty<bool>(Properties.Settings.Default.Decrement).AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
 
+
             IsFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
+            IsReprintSourceFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
             IsDuplicationCountVaild = new ReactiveProperty<bool>().AddTo(Disposable);
             Log = new ReactiveProperty<string>().AddTo(Disposable);
 
             OpenFile = new ReactiveCommand();
+            OpenReprintSourceFile = new ReactiveCommand();
             ExecuteGeneration = new[] { IsDuplicationCountVaild, IsFileLoaded }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
 
             AppendLog = logAppender;
@@ -66,6 +71,7 @@ namespace MotionLooper
         private void SetSubscribes()
         {
             FilePath.Subscribe(path => IsFileLoaded.Value = !string.IsNullOrEmpty(path));
+            ReprintSourceFilePath.Subscribe(path => IsReprintSourceFileLoaded.Value = !string.IsNullOrEmpty(path));
 
             Interval.Subscribe(interval =>
             {
@@ -109,7 +115,7 @@ namespace MotionLooper
             LoopNum.Subscribe(UpdateElemNum);
             EnableDecrement.Subscribe(_ => UpdateElemNum(0));
 
-            OpenFile.Subscribe(_ =>
+            Action<ReactiveProperty<string?>> showOpenFileDialog = filePathProperty =>
             {
                 var ofd = new OpenFileDialog()
                 {
@@ -122,10 +128,12 @@ namespace MotionLooper
 
                 if (ofd.ShowDialog() ?? false)
                 {
-                    string fileName = ofd.FileName;
-                    ReadFile(fileName);
+                    ReadFile(ofd.FileName, filePathProperty);
                 }
-            });
+            };
+
+            OpenFile.Subscribe(_ => showOpenFileDialog(FilePath));
+            OpenReprintSourceFile.Subscribe(_ => showOpenFileDialog(ReprintSourceFilePath));
 
             ExecuteGeneration.Subscribe(_ =>
             {
@@ -158,6 +166,7 @@ namespace MotionLooper
             });
 
             FilePath.Subscribe(path => Properties.Settings.Default.FilePath = path);
+            ReprintSourceFilePath.Subscribe(path => Properties.Settings.Default.ReprintSourceFilePath = path);
             Interval.Subscribe(iv => Properties.Settings.Default.Interval = iv ?? 1);
             BPM.Subscribe(bpm => Properties.Settings.Default.BPM = bpm ?? 1);
             Frequency.Subscribe(freq => Properties.Settings.Default.Frequency = freq);
@@ -166,23 +175,23 @@ namespace MotionLooper
             EnableDecrement.Subscribe(d => Properties.Settings.Default.Decrement = d);
         }
 
-        public void ReadFile(string fileName)
+        public void ReadFile(string fileName, ReactiveProperty<string?> filePathProperty)
         {
             try
             {
                 var vmd = Model.ReadFile(fileName);
-                FilePath.Value = fileName;
+                filePathProperty.Value = fileName;
                 AppendLog($"入力フレーム数 : {vmd.Frames.Count()}");
             }
             catch (FileNotFoundException)
             {
                 AppendLog("ファイルが見つかりませんでした。");
-                FilePath.Value = null;
+                filePathProperty.Value = null;
             }
             catch (InvalidDataException)
             {
                 AppendLog("非VMDファイルが指定されました。");
-                FilePath.Value = null;
+                filePathProperty.Value = null;
             }
         }
 
