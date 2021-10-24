@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -18,7 +18,8 @@ namespace MotionLooper
 
         bool ignoreChange = false;
 
-        public ReactiveProperty<string> FilePath { get; }
+        public ReactiveProperty<string?> FilePath { get; }
+        public ReactiveProperty<string?> ReprintSourceFilePath { get; }
         public ReactiveProperty<decimal?> Interval { get; }
         public ReactiveProperty<decimal?> BPM { get; }
         public ReactiveProperty<int> Frequency { get; }
@@ -27,7 +28,8 @@ namespace MotionLooper
         public ReactiveProperty<bool> EnableDecrement { get; }
         public ReactiveProperty<int> ElementNum { get; }
 
-        public ReactiveProperty<bool> IsFileSpecified { get; }
+        public ReactiveProperty<bool> IsFileLoaded { get; }
+        public ReactiveProperty<bool> IsReprintSourceFileLoaded { get; }
         public ReactiveProperty<bool> IsDuplicationCountVaild { get; }
         public ReactiveProperty<string> Log { get; }
 
@@ -39,7 +41,7 @@ namespace MotionLooper
 
         public ViewModel(Action<string> logAppender)
         {
-            FilePath = new ReactiveProperty<string>(Properties.Settings.Default.FilePath).AddTo(Disposable);
+            FilePath = new ReactiveProperty<string?>(Properties.Settings.Default.FilePath).AddTo(Disposable);
             Interval = new ReactiveProperty<decimal?>(Properties.Settings.Default.Interval).AddTo(Disposable);
             BPM = new ReactiveProperty<decimal?>(Properties.Settings.Default.BPM).AddTo(Disposable);
             Frequency = new ReactiveProperty<int>(Properties.Settings.Default.Frequency).AddTo(Disposable);
@@ -48,12 +50,12 @@ namespace MotionLooper
             EnableDecrement = new ReactiveProperty<bool>(Properties.Settings.Default.Decrement).AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
 
-            IsFileSpecified = new ReactiveProperty<bool>().AddTo(Disposable);
+            IsFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
             IsDuplicationCountVaild = new ReactiveProperty<bool>().AddTo(Disposable);
             Log = new ReactiveProperty<string>().AddTo(Disposable);
 
             OpenFile = new ReactiveCommand();
-            ExecuteGeneration = new[] { IsDuplicationCountVaild, IsFileSpecified }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
+            ExecuteGeneration = new[] { IsDuplicationCountVaild, IsFileLoaded }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
 
             AppendLog = logAppender;
 
@@ -63,7 +65,7 @@ namespace MotionLooper
 
         private void SetSubscribes()
         {
-            FilePath.Subscribe(path => IsFileSpecified.Value = !string.IsNullOrEmpty(path));
+            FilePath.Subscribe(path => IsFileLoaded.Value = !string.IsNullOrEmpty(path));
 
             Interval.Subscribe(interval =>
             {
