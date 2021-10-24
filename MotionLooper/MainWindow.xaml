@@ -116,7 +116,7 @@
                             <TextBlock Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15">
                                 位置/補間曲線の転写元項目名
                             </TextBlock>
-                            <Controls:DropDownButton Name="ItemOfPuttingBase" Grid.Row="0" Grid.Column="1" />
+                            <ComboBox Name="ItemOfPuttingBase" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding ReprintSourceItemNames}" DropDownOpened="ItemOfPuttingBase_DropDownOpened"/>
                             <Button Grid.Row="1" Grid.ColumnSpan="2" x:Name="ButtonPutFromScore" Content="転写元VMDのフレーム位置に対象モーションを設置" FontSize="15" Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"/>
                         </Grid>
                     </StackPanel>

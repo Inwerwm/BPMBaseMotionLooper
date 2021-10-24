@@ -33,5 +33,10 @@ namespace MotionLooper
         {
             ((ViewModel)DataContext).ReadFile(((string[])e.Data.GetData(DataFormats.FileDrop))[0], ((ViewModel)DataContext).FilePath);
         }
+
+        private void ItemOfPuttingBase_DropDownOpened(object sender, EventArgs e)
+        {
+            (DataContext as ViewModel)?.LoadReprintSourceItemNames.Execute();
+        }
     }
 }

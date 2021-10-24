@@ -33,8 +33,11 @@ namespace MotionLooper
         public ReactiveProperty<bool> IsDuplicationCountVaild { get; }
         public ReactiveProperty<string> Log { get; }
 
+        public ReactiveCollection<string> ReprintSourceItemNames { get; }
+
         public ReactiveCommand OpenFile { get; }
-        public ReactiveCommand OpenReprintSourceFile { get;}
+        public ReactiveCommand OpenReprintSourceFile { get; }
+        public ReactiveCommand LoadReprintSourceItemNames { get; }
         public ReactiveCommand ExecuteGeneration { get; }
         public ReactiveCommand ExecuteMorphReprinting { get; }
         private Action<string> AppendLog { get; }
@@ -53,6 +56,8 @@ namespace MotionLooper
             EnableDecrement = new ReactiveProperty<bool>(Properties.Settings.Default.Decrement).AddTo(Disposable);
             ElementNum = new ReactiveProperty<int>().AddTo(Disposable);
 
+            ReprintSourceItemNames = new ReactiveCollection<string>().AddTo(Disposable);
+
             IsFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
             IsReprintSourceFileLoaded = new ReactiveProperty<bool>().AddTo(Disposable);
             IsDuplicationCountVaild = new ReactiveProperty<bool>().AddTo(Disposable);
@@ -60,6 +65,7 @@ namespace MotionLooper
 
             OpenFile = new ReactiveCommand();
             OpenReprintSourceFile = new ReactiveCommand();
+            LoadReprintSourceItemNames = new ReactiveCommand();
             ExecuteGeneration = new[] { IsDuplicationCountVaild, IsFileLoaded }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
             ExecuteMorphReprinting = new[] { IsFileLoaded, IsReprintSourceFileLoaded }.CombineLatestValuesAreAllTrue().ToReactiveCommand();
 
@@ -134,7 +140,22 @@ namespace MotionLooper
             };
 
             OpenFile.Subscribe(_ => showOpenFileDialog(FilePath));
-            OpenReprintSourceFile.Subscribe(_ => showOpenFileDialog(ReprintSourceFilePath));
+            OpenReprintSourceFile.Subscribe(_ => { showOpenFileDialog(ReprintSourceFilePath); LoadReprintSourceItemNames.Execute(); });
+            LoadReprintSourceItemNames.Subscribe(_ =>
+            {
+                try
+                {
+                    var reprintSourcePath = ReprintSourceFilePath.Value ?? "";
+                    var reprintSourceVmd = Model.ReadFile(reprintSourcePath);
+
+                    ReprintSourceItemNames.Clear();
+                    ReprintSourceItemNames.AddRangeOnScheduler(Model.ExtractIncludedItemNames(reprintSourceVmd));
+                }
+                catch (Exception)
+                {
+                    
+                }
+            });
 
             ExecuteGeneration.Subscribe(_ =>
             {

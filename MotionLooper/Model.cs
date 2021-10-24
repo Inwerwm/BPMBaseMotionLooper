@@ -1,4 +1,6 @@
-﻿using MikuMikuMethods.VMD;
+﻿using MikuMikuMethods;
+using MikuMikuMethods.VMD;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,5 +40,19 @@ namespace MotionLooper
 
         public VocaloidMotionData FollowPut(VocaloidMotionData source, string sourceItemName, VocaloidMotionData target) =>
             FrameReprinter.PutFromScore(source, sourceItemName, target);
+
+        private IEnumerable<string>? ExtractFrameNames(IEnumerable<IVmdFrame> frames) => frames.Any() ? frames.GroupBy(f => f.Name).Select(g => g.Key) : null;
+
+        public IEnumerable<string> ExtractIncludedItemNames(VocaloidMotionData vmd) => vmd.Type switch
+        {
+            VMDType.Camera => ExtractFrameNames(vmd.Frames) ?? Array.Empty<string>(),
+            VMDType.Model =>
+                (
+                    ExtractFrameNames(vmd.MorphFrames) ?? Array.Empty<string>()
+                ).Concat(
+                    ExtractFrameNames(vmd.MotionFrames)?.OrderBy(name => name, new BoneNameComparer()) as IEnumerable<string> ?? Array.Empty<string>()
+                ),
+            _ => throw new NotImplementedException(),
+        };
     }
 }
