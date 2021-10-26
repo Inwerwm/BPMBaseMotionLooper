@@ -48,47 +48,38 @@ namespace MotionLooper
             var sourceFrames = source.Frames.Where(f => f.Name == sourceItemName).OrderBy(f => f.Frame);
             var targetItems = target.Frames.GroupBy(f => f.Name).ToArray();
 
-            var sourceQueue = new Queue<IVmdFrame>(sourceFrames);
-            var targetIters = targetItems.Select(g => g.GetEnumerator()).ToList();
-
             var result = new VocaloidMotionData() { Header = target.Header, ModelName = target.ModelName };
-            while (sourceQueue.Any())
+
+            foreach (var currentTargetItem in targetItems)
             {
-                for (int i = 0; i < targetIters.Count; i++)
+                var sourceQueue = new Queue<IVmdFrame>(sourceFrames);
+                while (sourceQueue.Any())
                 {
-                    // アイテムごとにフレームをクローンし現在のソースフレームの状態を反映して結果に追加する
-                    IEnumerator<IVmdFrame>? targetIter = targetIters[i];
-
-                    // ターゲットのイテレータを動かし、末尾まで来ていれば初期位置に戻る
-                    if (!targetIter.MoveNext())
+                    foreach (var currentTargetFrame in currentTargetItem)
                     {
-                        targetIters[i] = targetItems[i].GetEnumerator();
-                        targetIter = targetIters[i];
-                        targetIter.MoveNext();
-                    }
+                        IVmdFrame currentSourceFrame;
+                        if (!sourceQueue.TryDequeue(out currentSourceFrame)) continue;
 
-                    var frame = (IVmdFrame)targetIter.Current.Clone();
+                        var currentResultFrame = (IVmdFrame)currentTargetFrame.Clone();
 
-                    IVmdFrame currentSourceFrame = sourceQueue.Dequeue();
+                        // フレーム位置を転写
+                        currentResultFrame.Frame = currentSourceFrame.Frame;
 
-                    // フレーム位置を転写
-                    frame.Frame = currentSourceFrame.Frame;
-
-                    // 補間曲線を持つフレームであればそれも転写する
-                    bool sourceIsInterpolatable = currentSourceFrame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
-                    bool targetIsInterpolatable = frame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
-                    if (sourceIsInterpolatable && targetIsInterpolatable)
-                    {
-                        foreach (var curve in ((IVmdInterpolatable)frame).InterpolationCurves.Keys)
+                        // 補間曲線を持つフレームであればそれも転写する
+                        bool sourceIsInterpolatable = currentSourceFrame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
+                        bool targetIsInterpolatable = currentResultFrame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
+                        if (sourceIsInterpolatable && targetIsInterpolatable)
                         {
-                            ((IVmdInterpolatable)frame).InterpolationCurves[curve] = ((IVmdInterpolatable)currentSourceFrame).InterpolationCurves[curve];
+                            foreach (var curve in ((IVmdInterpolatable)currentResultFrame).InterpolationCurves.Keys)
+                            {
+                                ((IVmdInterpolatable)currentResultFrame).InterpolationCurves[curve] = ((IVmdInterpolatable)currentSourceFrame).InterpolationCurves[curve];
+                            }
                         }
-                    }
 
-                    result.AddFrame(frame);
+                        result.AddFrame(currentResultFrame);
+                    }
                 }
             }
-
             return result;
         }
     }
