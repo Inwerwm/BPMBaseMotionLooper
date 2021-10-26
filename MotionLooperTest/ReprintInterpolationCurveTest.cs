@@ -113,34 +113,27 @@ namespace MotionLooperTest
             var reprinter = new FrameReprinter();
             var result = reprinter.PutFromScore(source, "センター", target);
 
-            AreEqualFrameAndInterpolationCurvesBetweenSourceAndResult(source, result);
-            AreEqualPositionBetweenTargetAndResult(target, result);
-
-            static void AreEqualFrameAndInterpolationCurvesBetweenSourceAndResult(VocaloidMotionData source, VocaloidMotionData result)
+            // source と result の各要素のフレーム時間と補間曲線は等しいか
+            foreach ((VmdMotionFrame Source, VmdMotionFrame Result) item in source.MotionFrames.Zip(result.MotionFrames))
             {
-                foreach ((VmdMotionFrame Source, VmdMotionFrame Result) item in source.MotionFrames.Zip(result.MotionFrames))
-                {
-                    Assert.AreEqual(item.Source.Frame, item.Result.Frame);
+                Assert.AreEqual(item.Source.Frame, item.Result.Frame);
 
-                    foreach (var curve in item.Source.InterpolationCurves.Keys)
-                    {
-                        Assert.AreEqual(item.Source.InterpolationCurves[curve].EarlyControlePoint, item.Result.InterpolationCurves[curve].EarlyControlePoint);
-                        Assert.AreEqual(item.Source.InterpolationCurves[curve].LateControlePoint, item.Result.InterpolationCurves[curve].LateControlePoint);
-                    }
+                foreach (var curve in item.Source.InterpolationCurves.Keys)
+                {
+                    Assert.AreEqual(item.Source.InterpolationCurves[curve].EarlyControlePoint, item.Result.InterpolationCurves[curve].EarlyControlePoint);
+                    Assert.AreEqual(item.Source.InterpolationCurves[curve].LateControlePoint, item.Result.InterpolationCurves[curve].LateControlePoint);
                 }
             }
 
-            static void AreEqualPositionBetweenTargetAndResult(VocaloidMotionData target, VocaloidMotionData result)
+            // result の各要素とそれに対応する target の要素の位置は等しいか
+            var q = new Queue<VmdMotionFrame>(result.MotionFrames);
+            while (q.Any())
             {
-                var q = new Queue<VmdMotionFrame>(result.MotionFrames);
-                while (q.Any())
+                foreach (var tFrame in target.MotionFrames)
                 {
-                    foreach (var tFrame in target.MotionFrames)
-                    {
-                        if (!q.Any()) break;
-                        var rFrame = q.Dequeue();
-                        Assert.AreEqual(tFrame.Position, rFrame.Position);
-                    }
+                    if (!q.Any()) break;
+                    var rFrame = q.Dequeue();
+                    Assert.AreEqual(tFrame.Position, rFrame.Position);
                 }
             }
         }
