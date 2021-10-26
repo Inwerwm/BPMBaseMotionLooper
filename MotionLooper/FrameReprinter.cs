@@ -48,11 +48,11 @@ namespace MotionLooper
             var sourceFrames = source.Frames.Where(f => f.Name == sourceItemName).OrderBy(f => f.Frame);
             var targetItems = target.Frames.GroupBy(f => f.Name).ToArray();
 
-            var sourceIter = sourceFrames.GetEnumerator();
+            var sourceQueue = new Queue<IVmdFrame>(sourceFrames);
             var targetIters = targetItems.Select(g => g.GetEnumerator()).ToList();
 
             var result = new VocaloidMotionData() { Header = target.Header, ModelName = target.ModelName };
-            while (sourceIter.MoveNext())
+            while (sourceQueue.Any())
             {
                 for (int i = 0; i < targetIters.Count; i++)
                 {
@@ -69,17 +69,19 @@ namespace MotionLooper
 
                     var frame = (IVmdFrame)targetIter.Current.Clone();
 
+                    IVmdFrame currentSourceFrame = sourceQueue.Dequeue();
+
                     // フレーム位置を転写
-                    frame.Frame = sourceIter.Current.Frame;
+                    frame.Frame = currentSourceFrame.Frame;
 
                     // 補間曲線を持つフレームであればそれも転写する
-                    bool sourceIsInterpolatable = sourceIter.Current.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
+                    bool sourceIsInterpolatable = currentSourceFrame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
                     bool targetIsInterpolatable = frame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
                     if (sourceIsInterpolatable && targetIsInterpolatable)
                     {
                         foreach (var curve in ((IVmdInterpolatable)frame).InterpolationCurves.Keys)
                         {
-                            ((IVmdInterpolatable)frame).InterpolationCurves[curve] = ((IVmdInterpolatable)sourceIter.Current).InterpolationCurves[curve];
+                            ((IVmdInterpolatable)frame).InterpolationCurves[curve] = ((IVmdInterpolatable)currentSourceFrame).InterpolationCurves[curve];
                         }
                     }
 
