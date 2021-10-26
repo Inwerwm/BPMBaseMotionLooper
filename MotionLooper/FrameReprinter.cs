@@ -83,30 +83,7 @@ namespace MotionLooper
                         }
                     }
 
-                    // フレームをVMDの適切なプロパティのリストに追加する
-                    switch (frame.FrameType)
-                    {
-                        case VmdFrameType.Camera:
-                            result.CameraFrames.Add((VmdCameraFrame)frame);
-                            break;
-                        case VmdFrameType.Light:
-                            result.LightFrames.Add((VmdLightFrame)frame);
-                            break;
-                        case VmdFrameType.Shadow:
-                            result.ShadowFrames.Add((VmdShadowFrame)frame);
-                            break;
-                        case VmdFrameType.Property:
-                            result.PropertyFrames.Add((VmdPropertyFrame)frame);
-                            break;
-                        case VmdFrameType.Morph:
-                            result.MorphFrames.Add((VmdMorphFrame)frame);
-                            break;
-                        case VmdFrameType.Motion:
-                            result.MotionFrames.Add((VmdMotionFrame)frame);
-                            break;
-                        default:
-                            break;
-                    }
+                    result.AddFrame(frame);
                 }
             }
 
