@@ -2,8 +2,10 @@
 using MikuMikuMethods;
 using MikuMikuMethods.VMD;
 using MotionLooper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 
 namespace MotionLooperTest
 {
@@ -74,35 +76,64 @@ namespace MotionLooperTest
         [TestMethod]
         public void TestPutFromScore()
         {
-            var source = new VocaloidMotionData();
-            var target = new VocaloidMotionData();
+            VocaloidMotionData source;
+            VocaloidMotionData target;
 
-            for (uint i = 0; i < 10; i++)
+            source = new();
+            target = new();
+            CreateFrames(source, 12, i => i, _ => new(0, 0, 0), i => i / 12.0f);
+            CreateFrames(target, 3, i => i * 2, i => new(i + 1), i => i / 3.0f);
+            AssertIsPutFromScoreValid(source, target);
+
+            static void CreateFrames(VocaloidMotionData vmd, int createCount, Func<uint, uint> frameSetter, Func<uint, Vector3> positionSetter, Func<uint, float> curveSetter)
             {
-                var frame = new VmdMotionFrame("センター", i);
-                foreach (var curve in frame.InterpolationCurves.Keys)
+                for (uint i = 0; i < createCount; i++)
                 {
-                    frame.InterpolationCurves[curve].EarlyControlePointFloat = (i * 0.1f, 0);
-                    frame.InterpolationCurves[curve].LateControlePointFloat = (0, i * 0.1f);
+                    var frame = new VmdMotionFrame("センター", frameSetter(i));
+                    frame.Position = positionSetter(i);
+                    foreach (var curve in frame.InterpolationCurves.Keys)
+                    {
+                        frame.InterpolationCurves[curve].EarlyControlePointFloat = (curveSetter(i), 0);
+                        frame.InterpolationCurves[curve].LateControlePointFloat = (0, curveSetter(i));
+                    }
+
+                    vmd.AddFrame(frame);
                 }
-
-                source.AddFrame(frame);
             }
+        }
 
-            target.AddFrame(new VmdMotionFrame("ボーン", 0) { Position = new(1, 1, 1) });
-            target.AddFrame(new VmdMotionFrame("ボーン", 1) { Position = new(2, 2, 2) });
-
+        private static void AssertIsPutFromScoreValid(VocaloidMotionData source, VocaloidMotionData target)
+        {
             var reprinter = new FrameReprinter();
             var result = reprinter.PutFromScore(source, "センター", target);
-            var r = result.MotionFrames;
 
-            foreach ((VmdMotionFrame Source, VmdMotionFrame Result) item in source.MotionFrames.Zip(r))
+            AreEqualFrameAndInterpolationCurvesBetweenSourceAndResult(source, result);
+            AreEqualPositionBetweenTargetAndResult(target, result);
+
+            static void AreEqualFrameAndInterpolationCurvesBetweenSourceAndResult(VocaloidMotionData source, VocaloidMotionData result)
             {
-                Assert.AreEqual(item.Source.Frame, item.Result.Frame);
-                foreach (var curve in item.Source.InterpolationCurves.Keys)
+                foreach ((VmdMotionFrame Source, VmdMotionFrame Result) item in source.MotionFrames.Zip(result.MotionFrames))
                 {
-                    Assert.AreEqual(item.Source.InterpolationCurves[curve].EarlyControlePoint, item.Result.InterpolationCurves[curve].EarlyControlePoint);
-                    Assert.AreEqual(item.Source.InterpolationCurves[curve].LateControlePoint, item.Result.InterpolationCurves[curve].LateControlePoint);
+                    Assert.AreEqual(item.Source.Frame, item.Result.Frame);
+
+                    foreach (var curve in item.Source.InterpolationCurves.Keys)
+                    {
+                        Assert.AreEqual(item.Source.InterpolationCurves[curve].EarlyControlePoint, item.Result.InterpolationCurves[curve].EarlyControlePoint);
+                        Assert.AreEqual(item.Source.InterpolationCurves[curve].LateControlePoint, item.Result.InterpolationCurves[curve].LateControlePoint);
+                    }
+                }
+            }
+
+            static void AreEqualPositionBetweenTargetAndResult(VocaloidMotionData target, VocaloidMotionData result)
+            {
+                var q = new Queue<VmdMotionFrame>(result.MotionFrames);
+                while (q.Any())
+                {
+                    foreach (var tFrame in target.MotionFrames)
+                    {
+                        var rFrame = q.Dequeue();
+                        Assert.AreEqual(tFrame.Position, rFrame.Position);
+                    }
                 }
             }
         }
