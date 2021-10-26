@@ -57,8 +57,8 @@ namespace MotionLooper
                 {
                     foreach (var currentTargetFrame in currentTargetItem)
                     {
-                        IVmdFrame currentSourceFrame;
-                        if (!sourceQueue.TryDequeue(out currentSourceFrame)) continue;
+                        if (!sourceQueue.Any()) break;
+                        IVmdFrame currentSourceFrame = sourceQueue.Dequeue();
 
                         var currentResultFrame = (IVmdFrame)currentTargetFrame.Clone();
 
