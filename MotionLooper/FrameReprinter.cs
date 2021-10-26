@@ -66,9 +66,7 @@ namespace MotionLooper
                         currentResultFrame.Frame = currentSourceFrame.Frame;
 
                         // 補間曲線を持つフレームであればそれも転写する
-                        bool sourceIsInterpolatable = currentSourceFrame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
-                        bool targetIsInterpolatable = currentResultFrame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
-                        if (sourceIsInterpolatable && targetIsInterpolatable)
+                        if (isInterpolatable(currentSourceFrame) && isInterpolatable(currentResultFrame))
                         {
                             foreach (var curve in ((IVmdInterpolatable)currentResultFrame).InterpolationCurves.Keys)
                             {
@@ -81,6 +79,8 @@ namespace MotionLooper
                 }
             }
             return result;
+
+            static bool isInterpolatable(IVmdFrame frame) => frame.GetType().GetInterfaces()?.Contains(typeof(IVmdInterpolatable)) ?? false;
         }
     }
 }
