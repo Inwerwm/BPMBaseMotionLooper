@@ -137,6 +137,7 @@ namespace MotionLooperTest
                 {
                     foreach (var tFrame in target.MotionFrames)
                     {
+                        if (!q.Any()) break;
                         var rFrame = q.Dequeue();
                         Assert.AreEqual(tFrame.Position, rFrame.Position);
                     }
