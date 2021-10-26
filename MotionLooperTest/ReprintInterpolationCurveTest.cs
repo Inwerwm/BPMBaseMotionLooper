@@ -81,6 +81,12 @@ namespace MotionLooperTest
 
             source = new();
             target = new();
+            CreateFrames(source, 10, i => i, _ => new(0, 0, 0), i => i * 0.1f);
+            CreateFrames(target, 2, i => i, i => new(i + 1), i => i * 0.5f);
+            AssertIsPutFromScoreValid(source, target);
+
+            source = new();
+            target = new();
             CreateFrames(source, 12, i => i, _ => new(0, 0, 0), i => i / 12.0f);
             CreateFrames(target, 3, i => i * 2, i => new(i + 1), i => i / 3.0f);
             AssertIsPutFromScoreValid(source, target);
